@@ -8,6 +8,7 @@ const app = express();
 app.use(express.json())
 app.use(fileUpload());
 
+const azureAdmin = require("./services/azure_admin");
 const userController = require("./controllers/user_controller");
 const companyRepository = require("./repositories/company_repository");
 const userRepository = require("./repositories/user_repository");
@@ -17,6 +18,10 @@ const userRepository = require("./repositories/user_repository");
 */
 const router = express.Router()
 app.use('/api', router)
+
+router.get("/", (req, res) => {
+    azureAdmin.getToken();
+});
 
 // Get companies
 router.get("/companies", (req, res) => {
