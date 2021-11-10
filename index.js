@@ -42,7 +42,7 @@ router.get("/companies/:companyId", (req, res) => {
     const companyId = req.params.companyId;
 
     companyRepository.getCompanyById(companyId).then(company => { 
-        return res.status(200).json(company)
+        return res.status(200).json(company);
     });
 })
 // Edit company
@@ -50,17 +50,18 @@ router.patch("/companies/:companyId", (req, res) => {
     const companyId = req.params.companyId;
 
     companyRepository.editCompanyById(companyId, req.body).then(editedCompany => { 
-        return res.status(200).json(editedCompany)
+        return res.status(200).json(editedCompany);
     });
 });
 
 // Delete company
-router.delete("/companies/:companyId", (req, res) => {
+router.delete("/companies/:companyId", async (req, res) => {
     const companyId = req.params.companyId;
 
-    companyRepository.deleteCompanyById(companyId).then(deletedCompany => { 
-        return res.status(200).json(deletedCompany)
-    });
+    const deletedCompany = await companyRepository.deleteCompanyById(companyId);
+    await azureRepository.deleteBusiness(deletedCompany.bookingsid);
+
+    return res.status(200).json(deletedCompany);
 })
 
 // Edit user

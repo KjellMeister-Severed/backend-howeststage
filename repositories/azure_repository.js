@@ -16,7 +16,8 @@ function addBusiness(company) {
     });
 }
 
-function deleteBusiness() {
+function deleteBusiness(bookingsId) {
+    return azureService.fetchFromGraph("DELETE", `bookingBusinesses/${bookingsId}`);
 }
 
-module.exports = { addBusiness }
+module.exports = { addBusiness, deleteBusiness };

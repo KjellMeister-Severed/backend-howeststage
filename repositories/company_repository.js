@@ -109,7 +109,7 @@ async function deleteCompanyById(id) {
         database.executeQuery((connection) => {
             connection.query(`DELETE FROM companies WHERE id = ?`,
             id,
-            function (err, result) {
+            function (err) {
                 if (err) throw err;
 
                 resolve(deletedCompany);
