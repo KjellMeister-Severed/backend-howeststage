@@ -29,7 +29,6 @@ async function getToken() {
 
     return new Promise((resolve, reject) => {
         pca.acquireTokenByUsernamePassword(usernamePasswordRequest).then((response) => {
-            console.log(response.accessToken);
             resolve(response.accessToken);
         }).catch((error) => {
             reject(error);
@@ -56,7 +55,7 @@ async function fetchFromGraph(method, endpoint, body) {
             .then(response => response.json())
             .then(data => resolve(data))
             .catch(err => {
-                console.log(err);
+                reject(err);
             });
         });
     } else {
@@ -64,7 +63,7 @@ async function fetchFromGraph(method, endpoint, body) {
             fetch(`https://graph.microsoft.com/beta/${endpoint}`, requestOptions)
             .then(() => resolve(true))
             .catch(err => {
-                console.log(err);
+                reject(err);
             });
         });
     }

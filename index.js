@@ -9,9 +9,11 @@ app.use(express.json())
 app.use(fileUpload());
 
 const azureRepository = require("./repositories/azure_repository");
-const userController = require("./controllers/user_controller");
 const companyRepository = require("./repositories/company_repository");
 const userRepository = require("./repositories/user_repository");
+
+const userController = require("./controllers/user_controller");
+const companyController = require("./controllers/company_controller");
 
 /*
     API requests
@@ -32,9 +34,17 @@ router.get("/companies", (req, res) => {
 // Create company
 router.post("/companies", async (req, res) => {
     const newCompany = await companyRepository.addCompany(req.body);
-    const bookingsBusiness = await azureRepository.addBusiness(newCompany);
-    companyRepository.setBookingsId(newCompany.id, bookingsBusiness.id);
+    const employee = await azureRepository.addEmployee(newCompany);
+    companyRepository.setBookingsId(newCompany.id, employee.id);
     return res.status(200).json(newCompany);
+});
+
+// Import company CSV
+router.post("/companies/csv", async (req, res) => {
+    companyController.uploadCSV(req.files.companiesCsv);
+    const success = await companyController.addCompaniesFromCSV("./companies.csv");
+
+    res.status(200).json({result: success});
 });
 
 // Get company by ID
@@ -59,7 +69,7 @@ router.delete("/companies/:companyId", async (req, res) => {
     const companyId = req.params.companyId;
 
     const deletedCompany = await companyRepository.deleteCompanyById(companyId);
-    await azureRepository.deleteBusiness(deletedCompany.bookingsid);
+    await azureRepository.deleteEmployee(deletedCompany.bookingsid);
 
     return res.status(200).json(deletedCompany);
 })

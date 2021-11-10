@@ -1,0 +1,66 @@
+const fs = require('fs');
+const path = require("path");
+const csv = require('csv-parser');
+const stripBom = require('strip-bom-stream');
+
+const companyRepository = require("../repositories/company_repository");
+const azureRepository = require("../repositories/azure_repository");
+
+function uploadCSV(file) {
+  if(!file) {
+    throw "File not found.";
+  }
+
+  const extension = path.extname(file.name).toLowerCase();
+  if(extension != ".csv") {
+      throw "The file needs to be CSV file.";
+  }
+
+  file.mv(`./companies.csv`);
+  return true;
+}
+
+function addCompaniesFromCSV(csvFileUrl) {
+  return new Promise((resolve) => {
+    const companies = [];
+
+      fs.createReadStream(csvFileUrl)
+      .pipe(stripBom())
+      .pipe(csv({ separator: ';' }))
+      .on('data', (row) => {
+        companies.push(row);
+      })
+      .on('end', () => {
+          let counter = 0; // used for the delay between imports
+          let progress = 0;
+
+          companies.forEach(company => {
+            setTimeout(async () => {
+              const newCompany = await companyRepository.addCompany({
+                name: company.name,
+                email: `employee${progress}@howest.be`,
+                phonenumber: company.phone_number,
+                address: company.address,
+                postalcode: company.postalcode,
+                city: company.city,
+                website: company.website,
+                description: company.description,
+                lookingfor: company.looking_for,
+              });
+              const employee = await azureRepository.addEmployee(newCompany);
+              console.log(`${company.name} ${company.email}`);
+              console.log(employee);
+              await companyRepository.setBookingsId(newCompany.id, employee.id);
+
+              progress++;
+              if(progress == company.length) {
+                resolve(true);
+              }
+            }, 2000 * counter);
+            counter++;
+        });
+      });
+  });
+}
+
+module.exports = { uploadCSV, addCompaniesFromCSV };

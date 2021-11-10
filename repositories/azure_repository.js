@@ -1,23 +1,18 @@
 const azureService = require("../services/azure_service");
+const STAGEMARKT_BOOKING_BUSINESS = "HowestStagemarkt@howeststageplatform.onmicrosoft.com"; 
 
-function addBusiness(company) {
-    return azureService.fetchFromGraph("POST", "bookingBusinesses", {
-        address: {
-            city: company.city,
-            street: company.address,
-            postalCode: company.postalcode,
-            countryOrRegion: "Belgium"
-        },
+function addEmployee(company) {
+    return azureService.fetchFromGraph("POST", 
+    `bookingBusinesses/${STAGEMARKT_BOOKING_BUSINESS}/staffMembers`, {
         displayName: company.name,
-        email: company.email,
-        isPublished: true,
-        phone: company.phonenumber,
-        webSiteUrl: company.website
+        emailAddress: company.email,
+        role: "externalGuest",
     });
 }
 
-function deleteBusiness(bookingsId) {
-    return azureService.fetchFromGraph("DELETE", `bookingBusinesses/${bookingsId}`);
+function deleteEmployee(bookingsId) {
+    return azureService.fetchFromGraph("DELETE",
+    `bookingBusinesses/${STAGEMARKT_BOOKING_BUSINESS}/staffMembers/${bookingsId}`);
 }
 
-module.exports = { addBusiness, deleteBusiness };
+module.exports = { addEmployee, deleteEmployee };
