@@ -3,7 +3,7 @@ const database = require("../services/database");
 function getAllCompanies() {
     return new Promise((resolve) => {
         database.executeQuery((connection) => {
-            connection.query(`SELECT id, name, email, phone_number, address, postal_code, city, website, description, looking_for 
+            connection.query(`SELECT id, name, email, phone_number, address, postal_code, city, website, description, looking_for, bookings_id 
             FROM companies`, function (err, result) {
                 if (err) throw err;
                 resolve(result.map(rowToCompany));
@@ -15,7 +15,7 @@ function getAllCompanies() {
 function getCompanyById(id) {
     return new Promise((resolve) => {
         database.executeQuery((connection) => {
-            connection.query(`SELECT id, name, email, phone_number, address, postal_code, city, website, description, looking_for 
+            connection.query(`SELECT id, name, email, phone_number, address, postal_code, city, website, description, looking_for, bookings_id
             FROM companies WHERE id = ?`,
             id,
             function (err, result) {
@@ -86,6 +86,22 @@ async function editCompanyById(id, editCompany) {
     });
 }
 
+async function setBookingsId(companyId, bookingsId) {
+    return new Promise((resolve) => {
+        database.executeQuery((connection) => {
+            connection.query(`UPDATE companies
+            SET bookings_id = ?
+            WHERE id = ?`,
+            [bookingsId, companyId],
+            function (err) {
+                if (err) throw err;
+
+                resolve(true);
+            });
+        });
+    });
+}
+
 async function deleteCompanyById(id) {
     const deletedCompany = await getCompanyById(id);
 
@@ -113,8 +129,9 @@ function rowToCompany(row) {
         city: row.city,
         website: row.website,
         description: row.description,
-        lookingfor: row.looking_for
+        lookingfor: row.looking_for,
+        bookingsid: row.bookings_id
     };
 }
 
-module.exports = { getAllCompanies, getCompanyById, deleteCompanyById, addCompany, editCompanyById }
+module.exports = { getAllCompanies, getCompanyById, deleteCompanyById, addCompany, editCompanyById, setBookingsId }

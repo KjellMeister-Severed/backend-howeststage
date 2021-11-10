@@ -46,12 +46,17 @@ async function fetchFromGraph(method, endpoint, body) {
     }
 
     if(body != null) {
-        requestOptions.body = body;
+        requestOptions.body = JSON.stringify(body);
     }
 
-    fetch(`https://graph.microsoft.com/beta/${endpoint}`, requestOptions)
-    .then(response => response.json())
-    .then(data => console.log(data));
+    return new Promise((resolve, reject) => {
+        fetch(`https://graph.microsoft.com/beta/${endpoint}`, requestOptions)
+        .then(response => response.json())
+        .then(data => resolve(data))
+        .catch(err => {
+            console.log(err);
+        });
+    });
 }
 
 module.exports = { fetchFromGraph };

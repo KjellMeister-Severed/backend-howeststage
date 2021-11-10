@@ -8,7 +8,7 @@ const app = express();
 app.use(express.json())
 app.use(fileUpload());
 
-const azureAdmin = require("./services/azure_admin");
+const azureRepository = require("./repositories/azure_repository");
 const userController = require("./controllers/user_controller");
 const companyRepository = require("./repositories/company_repository");
 const userRepository = require("./repositories/user_repository");
@@ -20,9 +20,6 @@ const router = express.Router()
 app.use('/api', router)
 
 router.get("/", (req, res) => {
-    azureAdmin.fetchFromGraph("GET", "bookingBusinesses").then(() => {
-        res.status(200).end();
-    });
 });
 
 // Get companies
@@ -33,10 +30,11 @@ router.get("/companies", (req, res) => {
 });
 
 // Create company
-router.post("/companies", (req, res) => {
-    companyRepository.addCompany(req.body).then(newCompany => {
-        return res.status(200).json(newCompany);
-    })
+router.post("/companies", async (req, res) => {
+    const newCompany = await companyRepository.addCompany(req.body);
+    const bookingsBusiness = await azureRepository.addBusiness(newCompany);
+    companyRepository.setBookingsId(newCompany.id, bookingsBusiness.id);
+    return res.status(200).json(newCompany);
 });
 
 // Get company by ID
