@@ -1,0 +1,250 @@
+swagger: "2.0"
+info:
+  description: "This is the API specification for the Howest Stageplatform application."
+  version: "1.0.0"
+  title: "Howest Stageplatform"
+tags:
+- name: "Users"
+- name: "Companies"
+schemes:
+- "http"
+host: localhost:3000
+basePath: /api
+paths:
+  /user:
+    get:
+      tags:
+        - Users
+      summary: "Retrieve information about the currently logged in user"
+      responses:
+        "200":
+          description: "Succesful, returns the user information"
+          schema:
+            $ref: "#/definitions/User"
+    patch:
+      tags:
+        - Users
+      summary: "Edit the settings of the logged in user"
+      parameters:
+      - in: body
+        name: cv_path
+        required: false
+        schema:
+          type: object
+          properties:
+            cv_path:
+              type: string
+              example: "/cv/1.pdf"
+            linkedin_url:
+              type: string
+              format: url
+              example: "https://nl.linkedin.com/"
+      responses:
+        "200":
+          description: "Succesful, returns the changed user information"
+          schema:
+            $ref: "#/definitions/User"
+  /user/cv:
+    get:
+      tags:
+        - Users
+      summary: "Download the user's uploaded CV"
+      responses:
+        "200":
+          description: "Succesful, returns file download"
+          schema:
+            type: file
+    post:
+      tags:
+        - Users
+      summary: "Upload your CV if you are currently logged in"
+      consumes:
+        - multipart/form-data
+      parameters:
+      - in: formData
+        name: cv
+        type: file
+        description: "The CV file you want to upload"
+      responses:
+        "200":
+          description: "Succes, file uploaded"
+  /users:
+    get:
+      tags:
+        - Users
+      summary: "Get a list of all users and their information"
+      responses:
+        "200":
+          description: "Succesful, returns a list of all users"
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/User"
+  /companies:
+    get:
+      tags:
+        - Companies
+      summary: "Retrieve a list of all the companies"
+      responses:
+        "200":
+          description: "Succesful, returns list of all companies"
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/Company"
+  /companies/csv:
+    post:
+      tags:
+        - Companies
+      summary: "Import CSV file with companies"
+      consumes:
+        - multipart/form-data
+      parameters:
+       - in: formData
+         name: companiesCsv
+         type: file
+         description: The CSV file that contains the companies.
+      responses:
+        "200":
+          description: "Succesful, companies imported"
+  /companies/{companyId}:
+    get:
+      tags:
+        - Companies
+      summary: "Get a company's information by ID"
+      parameters:
+        - in: path
+          name: companyId
+          required: true
+          type: integer
+      responses:
+        "200":
+          description: "Succesful, returns the company"
+          schema:
+            $ref: "#/definitions/DetailedCompany"
+    patch:
+      tags:
+        - Companies
+      summary: "Edit a company by ID"
+      parameters:
+        - in: path
+          name: companyId
+          required: true
+          type: integer
+        - in: body
+          name: company
+          required: true
+          schema:
+            $ref: "#/definitions/EditCompany"
+      responses:
+        "200":
+          description: "Succesful, returns the edited company"
+          schema:
+            $ref: "#/definitions/DetailedCompany"
+    delete:
+      tags:
+        - Companies
+      summary: "Delete a company by ID"
+      parameters:
+        - in: path
+          name: companyId
+          required: true
+          type: integer
+      responses:
+        "200":
+          description: "Succesful, returns the deleted company"
+          schema:
+            $ref: "#/definitions/Company"
+definitions:
+  User:
+    type: object
+    properties:
+      id:
+        type: integer
+        example: 1
+      fullname:
+        type: string
+        example: "John Doe"
+      picture_url:
+        type: string
+        example: "http://blablablabla.com/4864864.png"
+      cv_path:
+        type: string
+        example: "/cv/1.pdf"
+      linkedin_url:
+        type: string
+        format: url
+        example: "https://nl.linkedin.com/"
+  Company:
+    type: object
+    properties:
+      id:
+        type: integer
+        example: 1
+      name:
+        type: string
+        example: "McDonalds"
+      description:
+        type: string
+        example: "I'm lovin it"
+  DetailedCompany:
+    allOf:
+      - $ref: "#/definitions/Company"
+      - type: object
+        properties:
+          address:
+            type: string
+            example: "Rijselstraat 5"
+          postalcode:
+            type: string
+            example: "8000"
+          city:
+            type: string
+            example: "Brugge"
+          website:
+            type: string
+            format: url
+            example: "https://www.mcdonalds.be/nl"
+          lookingfor:
+            type: string
+            example: "Gedreven IT-ers voor onze kiosk toepassing."
+          contactperson:
+            $ref: "#/definitions/ContactPerson"
+  EditCompany:
+    type: object
+    properties:
+      name:
+        type: string
+        example: "McDonalds"
+      description:
+        type: string
+        example: "I'm lovin it"
+      address:
+        type: string
+        example: "Rijselstraat 5"
+      postalcode:
+        type: string
+        example: "8000"
+      city:
+        type: string
+        example: "Brugge"
+      website:
+        type: string
+        format: url
+        example: "https://www.mcdonalds.be/nl"
+      lookingfor:
+        type: string
+        example: "Gedreven IT-ers voor onze kiosk toepassing."
+      contactperson:
+        $ref: "#/definitions/ContactPerson"
+  ContactPerson:
+    type: object
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+      email:
+        type: string
+      phone_number:
+        type: string

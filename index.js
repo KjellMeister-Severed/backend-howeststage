@@ -8,15 +8,21 @@ const app = express();
 app.use(express.json())
 app.use(fileUpload());
 
-const userController = require("./controllers/user_controller");
+const azureRepository = require("./repositories/azure_repository");
 const companyRepository = require("./repositories/company_repository");
 const userRepository = require("./repositories/user_repository");
+
+const userController = require("./controllers/user_controller");
+const companyController = require("./controllers/company_controller");
 
 /*
     API requests
 */
 const router = express.Router()
 app.use('/api', router)
+
+router.get("/", (req, res) => {
+});
 
 // Get companies
 router.get("/companies", (req, res) => {
@@ -26,10 +32,19 @@ router.get("/companies", (req, res) => {
 });
 
 // Create company
-router.post("/companies", (req, res) => {
-    companyRepository.addCompany(req.body).then(newCompany => {
-        return res.status(200).json(newCompany);
-    })
+router.post("/companies", async (req, res) => {
+    const newCompany = await companyRepository.addCompany(req.body);
+    const employee = await azureRepository.addEmployee(newCompany);
+    companyRepository.setBookingsId(newCompany.id, employee.id);
+    return res.status(200).json(newCompany);
+});
+
+// Import company CSV
+router.post("/companies/csv", async (req, res) => {
+    companyController.uploadCSV(req.files.companiesCsv);
+    const success = await companyController.addCompaniesFromCSV("./companies.csv");
+
+    res.status(200).json({result: success});
 });
 
 // Get company by ID
@@ -37,7 +52,7 @@ router.get("/companies/:companyId", (req, res) => {
     const companyId = req.params.companyId;
 
     companyRepository.getCompanyById(companyId).then(company => { 
-        return res.status(200).json(company)
+        return res.status(200).json(company);
     });
 })
 // Edit company
@@ -45,17 +60,18 @@ router.patch("/companies/:companyId", (req, res) => {
     const companyId = req.params.companyId;
 
     companyRepository.editCompanyById(companyId, req.body).then(editedCompany => { 
-        return res.status(200).json(editedCompany)
+        return res.status(200).json(editedCompany);
     });
 });
 
 // Delete company
-router.delete("/companies/:companyId", (req, res) => {
+router.delete("/companies/:companyId", async (req, res) => {
     const companyId = req.params.companyId;
 
-    companyRepository.deleteCompanyById(companyId).then(deletedCompany => { 
-        return res.status(200).json(deletedCompany)
-    });
+    const deletedCompany = await companyRepository.deleteCompanyById(companyId);
+    await azureRepository.deleteEmployee(deletedCompany.bookingsid);
+
+    return res.status(200).json(deletedCompany);
 })
 
 // Edit user
@@ -78,6 +94,6 @@ router.post("/user/cv", (req, res) => {
 });
 
 const server = http.createServer(app);
-const port = process.env.PORT || config.port;
+const port = process.env.PORT;
 server.listen(port);
 console.log(colors.red(`Back-end up and running on port ${port}.`));
