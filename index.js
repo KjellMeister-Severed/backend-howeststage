@@ -20,7 +20,9 @@ const router = express.Router()
 app.use('/api', router)
 
 router.get("/", (req, res) => {
-    azureAdmin.getToken();
+    azureAdmin.fetchFromGraph("GET", "bookingBusinesses").then(() => {
+        res.status(200).end();
+    });
 });
 
 // Get companies
@@ -83,6 +85,6 @@ router.post("/user/cv", (req, res) => {
 });
 
 const server = http.createServer(app);
-const port = process.env.PORT || config.port;
+const port = process.env.PORT;
 server.listen(port);
 console.log(colors.red(`Back-end up and running on port ${port}.`));

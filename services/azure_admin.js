@@ -1,3 +1,4 @@
+const fetch = require("node-fetch");
 const msal = require("@azure/msal-node");
 
 const msalConfig = {
@@ -12,7 +13,7 @@ const msalConfig = {
                 console.log(message);
             },
             piiLoggingEnabled: false,
-            logLevel: msal.LogLevel.Verbose,
+            logLevel: msal.LogLevel.Warning,
         }
     }
 };
@@ -22,15 +23,35 @@ const pca = new msal.ConfidentialClientApplication(msalConfig);
 async function getToken() {
     const usernamePasswordRequest = {
         scopes: ["Bookings.Manage.All", "Calendars.Read", "offline_access"],
-        username: "adriaandesaeger@howeststageplatform.onmicrosoft.com",
-        password: "Wachtwoord123",
+        username: process.env.AZURE_USERNAME,
+        password: process.env.AZURE_PASSWORD,
     };
 
-    pca.acquireTokenByUsernamePassword(usernamePasswordRequest).then((response) => {
-        console.log(response);
-    }).catch((error) => {
-        console.log(error);
+    return new Promise((resolve, reject) => {
+        pca.acquireTokenByUsernamePassword(usernamePasswordRequest).then((response) => {
+            resolve(response.accessToken);
+        }).catch((error) => {
+            reject(error);
+        });
     });
 }
 
-module.exports = { getToken };
+async function fetchFromGraph(method, endpoint, body) {
+    let requestOptions = {
+        method: method,
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${await getToken()}`
+        },
+    }
+
+    if(body != null) {
+        requestOptions.body = body;
+    }
+
+    fetch(`https://graph.microsoft.com/beta/${endpoint}`, requestOptions)
+    .then(response => response.json())
+    .then(data => console.log(data));
+}
+
+module.exports = { fetchFromGraph };
