@@ -25,10 +25,9 @@ router.get("/", (req, res) => {
 });
 
 // Get companies
-router.get("/companies", (req, res) => {
-    companyRepository.getAllCompanies().then(companies => {
-        return res.status(200).json(companies);
-    })
+router.get("/companies", async (req, res) => {
+    const companies = await companyRepository.getAllCompanies();
+    return res.status(200).json(companies);
 });
 
 // Create company
@@ -48,20 +47,19 @@ router.post("/companies/csv", async (req, res) => {
 });
 
 // Get company by ID
-router.get("/companies/:companyId", (req, res) => {
+router.get("/companies/:companyId", async (req, res) => {
     const companyId = req.params.companyId;
 
-    companyRepository.getCompanyById(companyId).then(company => { 
-        return res.status(200).json(company);
-    });
-})
+    const company = await companyRepository.getCompanyById(companyId);
+    return res.status(200).json(company);
+});
+
 // Edit company
-router.patch("/companies/:companyId", (req, res) => {
+router.patch("/companies/:companyId", async (req, res) => {
     const companyId = req.params.companyId;
 
-    companyRepository.editCompanyById(companyId, req.body).then(editedCompany => { 
-        return res.status(200).json(editedCompany);
-    });
+    const editedCompany = await companyRepository.editCompanyById(companyId, req.body); 
+    return res.status(200).json(editedCompany);
 });
 
 // Delete company
@@ -75,10 +73,9 @@ router.delete("/companies/:companyId", async (req, res) => {
 })
 
 // Edit user
-router.patch("/users", (req, res) => {
-    userRepository.editUserById(1, req.body).then(editedUser => {
-        return res.status(200).json(editedUser);
-    });
+router.patch("/users", async (req, res) => {
+    const editedUser = await userRepository.editUserById(1, req.body);
+    return res.status(200).json(editedUser);
 });
 
 // Download CV
@@ -87,10 +84,9 @@ router.get("/user/cv", (req, res) => {
 });
 
 // Upload CV
-router.post("/user/cv", (req, res) => {
-    userController.uploadCV(1, req.files.cv).then(result => {
-        return res.status(200).json(result);
-    });
+router.post("/user/cv", async (req, res) => {
+    const result = userController.uploadCV(1, req.files.cv);
+    return res.status(200).json(result);
 });
 
 const server = http.createServer(app);
