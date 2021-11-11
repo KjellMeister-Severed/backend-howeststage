@@ -74,6 +74,12 @@ router.patch("/users", async (req, res) => {
     return res.status(200).json(editedUser);
 });
 
+// Get appointments for user
+router.get("/user/appointments", async (req, res) => {
+    const appointments = await userController.getAppointmentsForUser("adriaandesaeger@howeststageplatform.onmicrosoft.com");
+    return res.status(200).json(appointments);
+});
+
 // Download CV
 router.get("/user/cv", (req, res) => {
     res.download("./private/cv/1.pdf");

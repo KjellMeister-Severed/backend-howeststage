@@ -23,4 +23,12 @@ async function listAppointmentsForCompany(bookingsId) {
     return appointments.filter(appointment => appointment.staffMemberIds.includes(bookingsId));
 }
 
-module.exports = { addEmployee, deleteEmployee, listAppointmentsForCompany };
+async function listAppointmentsForUser(userPrincipalName) {
+    let appointments = await azureService.fetchFromGraph("GET", 
+    `bookingBusinesses/${STAGEMARKT_BOOKING_BUSINESS}/appointments`);
+    appointments = appointments.value;
+
+    return appointments.filter(appointment => appointment.customerEmailAddress == userPrincipalName);
+}
+
+module.exports = { addEmployee, deleteEmployee, listAppointmentsForCompany, listAppointmentsForUser };

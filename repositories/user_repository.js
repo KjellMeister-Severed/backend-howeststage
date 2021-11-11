@@ -1,4 +1,5 @@
 const database = require("../services/database");
+const azureRepository = require("./azure_repository");
 
 async function getUserById(id) {
     return new Promise((resolve) => {
