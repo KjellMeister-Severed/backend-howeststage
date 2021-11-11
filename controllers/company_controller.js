@@ -68,7 +68,7 @@ function addCompaniesFromCSV(csvFileUrl) {
 
           companies.forEach(company => {
             setTimeout(async () => {
-              const newCompany = await addCompany({
+              await addCompany({
                 name: company.name,
                 email: `employee${progress}@howest.be`,
                 phonenumber: company.phone_number,
@@ -81,7 +81,7 @@ function addCompaniesFromCSV(csvFileUrl) {
               });
 
               progress++;
-              if(progress == company.length) {
+              if(progress == companies.length) {
                 resolve(true);
               }
             }, 2000 * counter);
