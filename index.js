@@ -28,7 +28,7 @@ router.get("/companies", async (req, res) => {
 
 // Create company
 router.post("/companies", async (req, res) => {
-    const newCompany = companyController.addCompany(req.body);
+    const newCompany = await companyController.addCompany(req.body);
     return res.status(200).json(newCompany);
 });
 
@@ -52,7 +52,7 @@ router.get("/companies/:companyId", async (req, res) => {
 router.patch("/companies/:companyId", async (req, res) => {
     const companyId = req.params.companyId;
 
-    const editedCompany = await companyController.editCompanyById(companyId, req.body); 
+    const editedCompany = await companyController.editCompany(companyId, req.body); 
     return res.status(200).json(editedCompany);
 });
 
