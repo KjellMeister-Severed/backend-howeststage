@@ -42,10 +42,17 @@ Howest Stagebooker is a React-based application that allows HoWest Personal & st
     DATABASE_HOST=localhost
     EXPRESS_PORT=8080
     ```
-3. In the same directory, run the following command: `npm run start`
+3. In the same directory, run the following command: `npm run start`.
     > :exclamation: Make sure that Docker (Desktop) is running!
+4. Connect to the database with a GUI using:
+    - The root username
+    - The root password
+    - The database port defined in `.env`
+    > :exclamation: Docker uses localhost, so you can just connect with localhost.
+5. Run the [`init_db.sql`](init_db.sql) file to construct the initial database
+    > :sweat: Kinda annoying right? But don't worry, we're currently investigating running this **automatically** when you start the server!
 
-:white_check_mark: **Done!** Normally you should be able to access the application on localhost:<EXPRESS_PORT>!
+:white_check_mark: **Done!** Normally you should be able to access the application on localhost:`<EXPRESS_PORT>`!
 
 > :bulb: If you also want to configure the front-end, you should continue following the guide [here](https://git.ti.howest.be/TI/2021-2022/s5/project-iv/projects/group-13/react-app/README.md) from step 3.
 
