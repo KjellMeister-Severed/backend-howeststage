@@ -1,6 +1,7 @@
 const database = require("../services/database");
+const azureRepository = require("../repositories/azure_repository");
 
-function getAllCompanies() {
+async function getAllCompanies() {
     return new Promise((resolve) => {
         database.executeQuery((connection) => {
             connection.query(`SELECT id, name, email, phone_number, address, postal_code, city, website, description, looking_for, bookings_id 
@@ -12,7 +13,7 @@ function getAllCompanies() {
     });
 }
 
-function getCompanyById(id) {
+async function getCompanyById(id) {
     return new Promise((resolve) => {
         database.executeQuery((connection) => {
             connection.query(`SELECT id, name, email, phone_number, address, postal_code, city, website, description, looking_for, bookings_id

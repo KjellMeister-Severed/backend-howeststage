@@ -17,9 +17,6 @@ const companyController = require("./controllers/company_controller");
 const router = express.Router()
 app.use('/api', router)
 
-router.get("/", (req, res) => {
-});
-
 // Get companies
 router.get("/companies", async (req, res) => {
     const companies = await companyController.getCompanies();
@@ -48,6 +45,12 @@ router.get("/companies/:companyId", async (req, res) => {
     return res.status(200).json(company);
 });
 
+// Get appointments for a company
+router.get("/companies/:companyId/appointments", async (req, res) => {
+    const companyId = req.params.companyId;
+    return res.status(200).json(await companyController.listAppointmentsForCompany(companyId));
+});
+
 // Edit company
 router.patch("/companies/:companyId", async (req, res) => {
     const companyId = req.params.companyId;
@@ -69,6 +72,12 @@ router.delete("/companies/:companyId", async (req, res) => {
 router.patch("/users", async (req, res) => {
     const editedUser = await userController.editUserById(1, req.body);
     return res.status(200).json(editedUser);
+});
+
+// Get appointments for user
+router.get("/user/appointments", async (req, res) => {
+    const appointments = await userController.getAppointmentsForUser("adriaandesaeger@howeststageplatform.onmicrosoft.com");
+    return res.status(200).json(appointments);
 });
 
 // Download CV

@@ -14,6 +14,11 @@ async function getCompanyById(companyId) {
   return await companyRepository.getCompanyById(companyId);
 }
 
+async function listAppointmentsForCompany(companyId) {
+  const company = await getCompanyById(companyId);
+  return await azureRepository.listAppointmentsForCompany(company.bookingsid);
+}
+
 async function addCompany(companyObject) {
   const newCompany = await companyRepository.addCompany(companyObject);
   const employee = await azureRepository.addEmployee(newCompany);
@@ -87,4 +92,4 @@ function addCompaniesFromCSV(csvFileUrl) {
 }
 
 module.exports = { getCompanies, getCompanyById, addCompany, editCompany, deleteCompany, 
-  uploadCSV, addCompaniesFromCSV };
+  uploadCSV, addCompaniesFromCSV, listAppointmentsForCompany };
