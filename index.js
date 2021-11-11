@@ -3,10 +3,12 @@ const http = require("http");
 const express = require("express");
 const fileUpload = require("express-fileupload");
 const colors = require('colors');
+const cors = require('cors');
 
 const app = express();
 app.use(express.json())
 app.use(fileUpload());
+app.use(cors());
 
 const userController = require("./controllers/user_controller");
 const companyController = require("./controllers/company_controller");
