@@ -17,9 +17,6 @@ const companyController = require("./controllers/company_controller");
 const router = express.Router()
 app.use('/api', router)
 
-router.get("/", (req, res) => {
-});
-
 // Get companies
 router.get("/companies", async (req, res) => {
     const companies = await companyController.getCompanies();
@@ -46,6 +43,12 @@ router.get("/companies/:companyId", async (req, res) => {
 
     const company = await companyController.getCompanyById(companyId);
     return res.status(200).json(company);
+});
+
+// Get appointments for a company
+router.get("/companies/:companyId/appointments", async (req, res) => {
+    const companyId = req.params.companyId;
+    return res.status(200).json(await companyController.listAppointmentsForCompany(companyId));
 });
 
 // Edit company
