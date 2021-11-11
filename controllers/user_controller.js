@@ -1,4 +1,9 @@
 const path = require("path");
+const userRepository = require("../repositories/user_repository");
+
+async function editUserById(id, editUser) {
+    return await userRepository.editUserById(id, editUser);
+}
 
 async function uploadCV(userId, file) {
     if(!file) {
@@ -26,4 +31,4 @@ function getProfilefile(userId) {
     }
 }
 
-module.exports = { uploadCV };
+module.exports = { editUserById, uploadCV };
