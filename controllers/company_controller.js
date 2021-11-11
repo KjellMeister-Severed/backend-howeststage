@@ -6,6 +6,33 @@ const stripBom = require('strip-bom-stream');
 const companyRepository = require("../repositories/company_repository");
 const azureRepository = require("../repositories/azure_repository");
 
+async function getCompanies() {
+  return await companyRepository.getAllCompanies();
+}
+
+async function getCompanyById(companyId) {
+  return await companyRepository.getCompanyById(companyId);
+}
+
+async function addCompany(companyObject) {
+  const newCompany = await companyRepository.addCompany(companyObject);
+  const employee = await azureRepository.addEmployee(newCompany);
+  await companyRepository.setBookingsId(newCompany.id, employee.id);
+  return newCompany;
+}
+
+async function editCompany(companyId, companyObject) {
+  return await companyRepository.editCompanyById(companyId, companyObject); 
+}
+
+async function deleteCompany(companyId) {
+  const deletedCompany = await companyRepository.deleteCompanyById(companyId);
+  await azureRepository.deleteEmployee(deletedCompany.bookingsid);
+
+  return deleteCompany;
+}
+
+
 function uploadCSV(file) {
   if(!file) {
     throw "File not found.";
@@ -63,4 +90,5 @@ function addCompaniesFromCSV(csvFileUrl) {
   });
 }
 
-module.exports = { uploadCSV, addCompaniesFromCSV };
+module.exports = { getCompanies, getCompanyById, addCompany, editCompany, deleteCompany, 
+  uploadCSV, addCompaniesFromCSV };

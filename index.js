@@ -8,10 +8,6 @@ const app = express();
 app.use(express.json())
 app.use(fileUpload());
 
-const azureRepository = require("./repositories/azure_repository");
-const companyRepository = require("./repositories/company_repository");
-const userRepository = require("./repositories/user_repository");
-
 const userController = require("./controllers/user_controller");
 const companyController = require("./controllers/company_controller");
 
@@ -26,15 +22,13 @@ router.get("/", (req, res) => {
 
 // Get companies
 router.get("/companies", async (req, res) => {
-    const companies = await companyRepository.getAllCompanies();
+    const companies = await companyController.getCompanies();
     return res.status(200).json(companies);
 });
 
 // Create company
 router.post("/companies", async (req, res) => {
-    const newCompany = await companyRepository.addCompany(req.body);
-    const employee = await azureRepository.addEmployee(newCompany);
-    companyRepository.setBookingsId(newCompany.id, employee.id);
+    const newCompany = companyController.addCompany(req.body);
     return res.status(200).json(newCompany);
 });
 
@@ -50,7 +44,7 @@ router.post("/companies/csv", async (req, res) => {
 router.get("/companies/:companyId", async (req, res) => {
     const companyId = req.params.companyId;
 
-    const company = await companyRepository.getCompanyById(companyId);
+    const company = await companyController.getCompanyById(companyId);
     return res.status(200).json(company);
 });
 
@@ -58,7 +52,7 @@ router.get("/companies/:companyId", async (req, res) => {
 router.patch("/companies/:companyId", async (req, res) => {
     const companyId = req.params.companyId;
 
-    const editedCompany = await companyRepository.editCompanyById(companyId, req.body); 
+    const editedCompany = await companyController.editCompanyById(companyId, req.body); 
     return res.status(200).json(editedCompany);
 });
 
@@ -66,15 +60,14 @@ router.patch("/companies/:companyId", async (req, res) => {
 router.delete("/companies/:companyId", async (req, res) => {
     const companyId = req.params.companyId;
 
-    const deletedCompany = await companyRepository.deleteCompanyById(companyId);
-    await azureRepository.deleteEmployee(deletedCompany.bookingsid);
+    const deletedCompany = await companyController.deleteCompany(companyId);
 
     return res.status(200).json(deletedCompany);
 })
 
 // Edit user
 router.patch("/users", async (req, res) => {
-    const editedUser = await userRepository.editUserById(1, req.body);
+    const editedUser = await userController.editUserById(1, req.body);
     return res.status(200).json(editedUser);
 });
 
