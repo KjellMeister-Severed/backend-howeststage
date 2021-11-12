@@ -31,6 +31,11 @@ async function listAppointmentsForUser(userPrincipalName) {
     return appointments.filter(appointment => appointment.customerEmailAddress == userPrincipalName);
 }
 
+async function getAppointment(appointmentId) {
+    return await azureService.fetchFromGraph("GET",
+    `bookingBusinesses/${STAGEMARKT_BOOKING_BUSINESS}/appointments/${appointmentId}`);
+}
+
 async function cancelAppointment(appointmentId) {
     return await azureService.fetchFromGraph("POST",
     `bookingBusinesses/${STAGEMARKT_BOOKING_BUSINESS}/appointments/${appointmentId}/cancel`, {
@@ -38,4 +43,4 @@ async function cancelAppointment(appointmentId) {
     });
 }
 
-module.exports = { addEmployee, deleteEmployee, listAppointmentsForCompany, listAppointmentsForUser, cancelAppointment };
+module.exports = { addEmployee, deleteEmployee, listAppointmentsForCompany, listAppointmentsForUser, cancelAppointment, getAppointment };
