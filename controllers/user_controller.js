@@ -36,4 +36,9 @@ function getProfilefile(userId) {
     }
 }
 
-module.exports = { editUserById, uploadCV, getAppointmentsForUser };
+async function cancelAppointmentForUser(userId, appointmentId) {
+    await azureRepository.cancelAppointment(appointmentId);
+    return true;
+}
+
+module.exports = { editUserById, uploadCV, getAppointmentsForUser, cancelAppointmentForUser };

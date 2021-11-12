@@ -77,9 +77,15 @@ router.patch("/users", async (req, res) => {
 });
 
 // Get appointments for user
-router.get("/user/appointments", async (req, res) => {
-    const appointments = await userController.getAppointmentsForUser("adriaandesaeger@howeststageplatform.onmicrosoft.com");
+router.get("/user/:userId/appointments", async (req, res) => {
+    const appointments = await userController.getAppointmentsForUser(req.params.userId);
     return res.status(200).json(appointments);
+});
+
+// Cancel a user appointment
+router.post("/user/:userId/appointments/:appointmentId/cancel", async (req, res) => {
+    const result = await userController.cancelAppointmentForUser(req.params.userId, req.params.appointmentId);
+    return res.status(200).json({result: result});
 });
 
 // Download CV

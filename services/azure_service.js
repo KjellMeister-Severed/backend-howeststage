@@ -49,24 +49,19 @@ async function fetchFromGraph(method, endpoint, body) {
         requestOptions.body = JSON.stringify(body);
     }
 
-    if(method != "DELETE") {
-        return new Promise((resolve, reject) => {
-            fetch(`https://graph.microsoft.com/beta/${endpoint}`, requestOptions)
-            .then(response => response.json())
-            .then(data => resolve(data))
-            .catch(err => {
-                reject(err);
-            });
+    return new Promise((resolve, reject) => {
+        fetch(`https://graph.microsoft.com/beta/${endpoint}`, requestOptions)
+        .then((response) => {
+            if(response.status == 204) {
+                return true;
+            } else {
+                return response.json();
+            }
+        }).then(data => resolve(data))
+        .catch(err => {
+            reject(err);
         });
-    } else {
-        return new Promise((resolve, reject) => {
-            fetch(`https://graph.microsoft.com/beta/${endpoint}`, requestOptions)
-            .then(() => resolve(true))
-            .catch(err => {
-                reject(err);
-            });
-        });
-    }
+    });
 }
 
 module.exports = { fetchFromGraph };

@@ -31,4 +31,11 @@ async function listAppointmentsForUser(userPrincipalName) {
     return appointments.filter(appointment => appointment.customerEmailAddress == userPrincipalName);
 }
 
-module.exports = { addEmployee, deleteEmployee, listAppointmentsForCompany, listAppointmentsForUser };
+async function cancelAppointment(appointmentId) {
+    return await azureService.fetchFromGraph("POST",
+    `bookingBusinesses/${STAGEMARKT_BOOKING_BUSINESS}/appointments/${appointmentId}/cancel`, {
+        cancellationMessage: "Your appointment has been succesfully canceled."
+    });
+}
+
+module.exports = { addEmployee, deleteEmployee, listAppointmentsForCompany, listAppointmentsForUser, cancelAppointment };
