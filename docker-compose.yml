@@ -5,6 +5,9 @@ services:
     image: mariadb
     restart: always
     container_name: MariaDB
+    build:
+      context: .
+      dockerfile: Dockerfile
     environment: 
       MYSQL_ROOT_PASSWORD:
         "${DATABASE_PASSWORD}"

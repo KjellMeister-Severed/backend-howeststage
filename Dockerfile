@@ -1,3 +1,4 @@
+### Backend ###
 FROM node:16
 
 # Create app directory
@@ -16,3 +17,8 @@ COPY . .
 EXPOSE 8080
 
 CMD [ "node", "index.js" ]
+
+### Server ##
+FROM mariadb
+
+COPY init_db.sql docker-entrypoint-initdb.d
