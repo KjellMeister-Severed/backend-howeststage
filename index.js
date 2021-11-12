@@ -12,6 +12,7 @@ app.use(cors());
 
 const userController = require("./controllers/user_controller");
 const companyController = require("./controllers/company_controller");
+const mailService = require("./services/mail_service");
 
 /*
     API requests
