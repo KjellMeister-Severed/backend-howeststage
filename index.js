@@ -12,12 +12,18 @@ app.use(cors());
 
 const userController = require("./controllers/user_controller");
 const companyController = require("./controllers/company_controller");
+const mailService = require("./services/mail_service");
 
 /*
     API requests
 */
 const router = express.Router()
 app.use('/api', router)
+
+router.get("/", async(req, res) => {
+    const result = await mailService.sendMail("adriaanmcwise@gmail.com", "Testmail", "test", "<h1>test</h1>");
+    res.status(200).json({result: result});
+});
 
 // Get companies
 router.get("/companies", async (req, res) => {
