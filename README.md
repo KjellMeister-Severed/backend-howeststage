@@ -20,7 +20,7 @@ Howest Stagebooker is a React-based application that allows HoWest Personal & st
 |`DATABASE_USER`|The database user designated for the application|Stage_Booker|
 |`DATABASE_PASSWORD`|The database password of the user, used by the application|z$x%*V&z2^*baX|
 |`DATABASE_PORT`|The database port that should be used for the deployed database.|*3306*|
-|`DATABASE_NAME`|The database's name that should be used by the application|
+|`DATABASE_NAME`|The database's name that should be used by the application|stagebooker|
 |`DATABASE_HOST`|The database's host address, used by the application|localhost|
 |`EXPRESS_PORT`|The port used by the application|8080|
 

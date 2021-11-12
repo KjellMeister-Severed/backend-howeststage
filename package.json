@@ -4,8 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "docker-compose up -d && nodemon ./index.js",
-    "rebuild": "docker-compose down && docker build ."
+    "start": "docker-compose up -d && node ./index.js",
+    "dev": "docker-compose up -d && node ./index.js",
+    "rebuild": "docker-compose down && docker build -f ./docker/DB . && docker build -f ./docker/Express ."
   },
   "repository": {
     "type": "git",
