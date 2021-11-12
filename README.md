@@ -21,6 +21,13 @@ Howest Stagebooker is a React-based application that allows HoWest Personal & st
 |`DATABASE_NAME`|The database's name that should be used by the application|
 |`DATABASE_HOST`|The database's host address, used by the application|localhost|
 |`EXPRESS_PORT`|The port used by the application|8080|
+|`AZURE_CLIENTSECRET`|A secret string that the application uses to prove its identity when requesting a token|eqB7Q~usJfWyLOP4YD9U8hDRRL21vboHoO3Ku|
+|`AZURE_USERNAME`|The username of the Azure account that the back-end uses to do its API calls|backend@howeststageplatform.onmicrosoft.com|
+|`AZURE_PASSWORD`|The password of the Azure account that the back-end uses to do its API calls|P4ssword15486|
+|`EMAIL_SERVER`|The SMTP server that should be used for our mail client.|smtp.live.com|
+|`EMAIL_USERNAME`|The email address you want to use to send mails.|noreply@howeststageplatform.onmicrosoft.com|
+|`EMAIL_PASSWORD`|The password that should be used for our mail client.|P4ssword15486|
+
 
 # Installation
 ## Production
@@ -35,12 +42,22 @@ Howest Stagebooker is a React-based application that allows HoWest Personal & st
    - **[Express Backend](https://git.ti.howest.be/TI/2021-2022/s5/project-iv/projects/group-13/back-end)**: https://git.ti.howest.be/TI/2021-2022/s5/project-iv/projects/group-13/back-end
 2. In the `back-end` directory, create a `.env` file. The explication of each variable, you can find [here](#env), but here's a example:
     ```dotenv
+    EXPRESS_PORT=3001
+
+    DATABASE_HOST=127.0.0.1
     DATABASE_PORT=3306
-    DATABASE_PASSWORD=Friday13th!
-    DATABASE_NAME=StageBooker
+    DATABASE_PASSWORD=TypescriptOnTop123!
+    DATABASE_NAME=stagebooker
     DATABASE_USER=root
-    DATABASE_HOST=localhost
-    EXPRESS_PORT=8080
+
+    AZURE_CLIENTSECRET=eaZ4O~usJLbgRHL1Y9MU8RPX2L72vb1H678Ku
+    AZURE_USERNAME=adriaandesaeger@howeststageplatform.onmicrosoft.com
+    AZURE_PASSWORD=NextJSyes
+
+    EMAIL_SERVER=smtp.live.com
+    EMAIL_PORT=587
+    EMAIL_USERNAME=noreply@howeststageplatform.onmicrosoft.com
+    EMAIL_PASSWORD=Test12345678
     ```
 3. In the same directory, run the following command: `npm run start`.
     > :exclamation: Make sure that Docker (Desktop) is running!
