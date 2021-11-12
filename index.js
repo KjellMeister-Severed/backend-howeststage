@@ -94,6 +94,6 @@ router.post("/user/cv", async (req, res) => {
 });
 
 const server = http.createServer(app);
-const port = process.env.PORT;
+const port = process.env.EXPRESS_PORT;
 server.listen(port);
 console.log(colors.red(`Back-end up and running on port ${port}.`));

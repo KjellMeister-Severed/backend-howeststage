@@ -1,0 +1,73 @@
+/*
+SQLyog Community v13.1.5  (64 bit)
+MySQL - 10.6.4-MariaDB-1:10.6.4+maria~focal : Database - StageBooker
+*********************************************************************
+*/
+
+/*!40101 SET NAMES utf8 */;
+
+/*!40101 SET SQL_MODE=''*/;
+
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+CREATE DATABASE /*!32312 IF NOT EXISTS*/`StageBooker` /*!40100 DEFAULT CHARACTER SET latin1 */;
+
+USE `StageBooker`;
+
+/*Table structure for table `azure_admin_accounts` */
+
+DROP TABLE IF EXISTS `azure_admin_accounts`;
+
+CREATE TABLE `azure_admin_accounts` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `access_token` text DEFAULT NULL,
+  `refresh_token` text DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+
+/*Data for the table `azure_admin_accounts` */
+
+insert  into `azure_admin_accounts`(`id`,`access_token`,`refresh_token`) values 
+(1,'eyJ0eXAiOiJKV1QiLCJub25jZSI6ImUtTW5aUl9EWkdnT2RDZXZ3anRLNElfTkxtdXJhd1c0UXJLX0FTSkg5LXMiLCJhbGciOiJSUzI1NiIsIng1dCI6Imwzc1EtNTBjQ0g0eEJWWkxIVEd3blNSNzY4MCIsImtpZCI6Imwzc1EtNTBjQ0g0eEJWWkxIVEd3blNSNzY4MCJ9.eyJhdWQiOiIwMDAwMDAwMy0wMDAwLTAwMDAtYzAwMC0wMDAwMDAwMDAwMDAiLCJpc3MiOiJodHRwczovL3N0cy53aW5kb3dzLm5ldC8yMjNiYTM4NS1hNzhiLTRiYzItODI1Yi0xYzQ1YTdkOTdhZmEvIiwiaWF0IjoxNjM2NDUwNjM2LCJuYmYiOjE2MzY0NTA2MzYsImV4cCI6MTYzNjQ1NTc2OCwiYWNjdCI6MCwiYWNyIjoiMSIsImFpbyI6IkFVUUF1LzhUQUFBQVkvb1pXeVhmS0J2ZFNRYUNvK3FmMjVGSWlXTHg0SFdNNjlUNXNxaVNiY3NlVStuNGJ0MlhaelBFcDFnOUZ2dmhqSVR4ZUQycWU3UE9IWXlFSElaYlJnPT0iLCJhbXIiOlsicHdkIiwibWZhIl0sImFwcF9kaXNwbGF5bmFtZSI6Ikhvd2VzdCBTdGFnZSBCb29raW5nIFBsYXRmb3JtIiwiYXBwaWQiOiIwOTdlZTc5Ny00YWExLTQ3OTQtYTI4ZS0xZmRiM2MxZDBkYmUiLCJhcHBpZGFjciI6IjEiLCJmYW1pbHlfbmFtZSI6IkRlIFNhZWdlciIsImdpdmVuX25hbWUiOiJBZHJpYWFuIiwiaWR0eXAiOiJ1c2VyIiwiaXBhZGRyIjoiMTkzLjE5MS4xNzkuMjQ0IiwibmFtZSI6IkFkcmlhYW4gRGUgU2FlZ2VyIiwib2lkIjoiM2JkNDg1YmYtNzBjMC00NmI0LWE4YTItM2M5ODkwNjlhZTEwIiwicGxhdGYiOiIzIiwicHVpZCI6IjEwMDMyMDAxOTVENzVGRUUiLCJyaCI6IjAuQVM4QWhhTTdJb3Vud2t1Q1d4eEZwOWw2LXBmbmZnbWhTcFJIb280ZjJ6d2REYjR2QURJLiIsInNjcCI6IkJvb2tpbmdzLk1hbmFnZS5BbGwgQ2FsZW5kYXJzLlJlYWQgb3BlbmlkIHByb2ZpbGUgVXNlci5SZWFkIGVtYWlsIiwic2lnbmluX3N0YXRlIjpbImttc2kiXSwic3ViIjoiZ1pEVTAyVk9lMktROVJfR3BFVW94M2lYSHduR3NkWk54Q2FRVktENG95QSIsInRlbmFudF9yZWdpb25fc2NvcGUiOiJFVSIsInRpZCI6IjIyM2JhMzg1LWE3OGItNGJjMi04MjViLTFjNDVhN2Q5N2FmYSIsInVuaXF1ZV9uYW1lIjoiYWRyaWFhbmRlc2FlZ2VyQGhvd2VzdHN0YWdlcGxhdGZvcm0ub25taWNyb3NvZnQuY29tIiwidXBuIjoiYWRyaWFhbmRlc2FlZ2VyQGhvd2VzdHN0YWdlcGxhdGZvcm0ub25taWNyb3NvZnQuY29tIiwidXRpIjoiek5jc0tBQzZKa1d5RUxPcS1jaHFBQSIsInZlciI6IjEuMCIsIndpZHMiOlsiNjJlOTAzOTQtNjlmNS00MjM3LTkxOTAtMDEyMTc3MTQ1ZTEwIiwiYjc5ZmJmNGQtM2VmOS00Njg5LTgxNDMtNzZiMTk0ZTg1NTA5Il0sInhtc19zdCI6eyJzdWIiOiJZeFBoM2x4ZVJVVkVlaEpqMUpyUW4za01zNjFneTdaa1d0eU8tZVctb0tRIn0sInhtc190Y2R0IjoxNjM0MDU2NDYwfQ.ibX6lBNHwvy6z4NzGzfa11ioiKUkjukwAYsREhlUyxFMgv7DyoUgQKk-7Bj_4XMvIaxWtWsTlUna2M8u7JuOWp6hPdNQH-Z6ytR9F0vOqkS-94u6H25YD9S55BYrs0RbPbdJWZF_qUecQh0r9lcf5ay_p35Anc_G3-CNRluhTJEzwHNkE5mCEMj3APkKV8vGjsFCKd8xff9OWSe20PQnKviBJsgzVdxNMF9Zv6DKRVObDkfg9hFqg674LelrjXhpmAEgb8W8i4wHVIWHBgXq2OcSEDzqtOYfGHnVv4r0c4EHCjH6dnKtG-3ehS85WTVDo5eOeu5T_TG7BuzCCRBqoA','0.AS8AhaM7IounwkuCWxxFp9l6-pfnfgmhSpRHoo4f2zwdDb4vADI.AgABAAAAAAD--DLA3VO7QrddgJg7WevrAgDs_wQA9P_dHGpaH4dr4s1fxicuZgIlohkX21nOiZc2UPb5iIaonj-Q4HX1sQSr_4Y2DBYdP_y5-IayLDO3QMEKznS_JXVKbtnXvLcsd6hJtb7F046QCpa81llcba3vqJEGOvpA85VfemErW8cupXZjEDbZGAqlxa_aAhDDWC9g-sOdh3rgOEC4v8zI4e7MpzGB5Ip211PuYrRmuAq2Krk_YcXn2rYgRhWGppLOETPBRlv255JTdYML1CsFVyl9cVmoZS8Oj0ce_y3OGKt9kKOW4YqwQ0GFWSA2LBIVLSVJ6pT3BxAvY2KmKrkf9a2LfyEepWKAWhxMLxysN9U7pMYEO-19KbxFtvfW-NWPv26OBIzQklwDKRsdSKnQ6DY0NLVUAtRFKQlqd-MWlG4qfprLBshhayT1UrKJzJ1L5F5IOzkDRkUgNy3KZ-iAhiv_iob91BB39qtwOGpgTqEh5-OkZMUoxFVFa30oTmPe4k4lhKnuyKULWwIfUNShe7kI5vffaZBnwt9hMm_OmcwaAqEpx1JRq_no_2zNxciW9D5jbpsImhYiOEfQ4gw2aXXsrO9CKUtwHwfMUWwzNP8-up-5eRb5cJ7OhGF8T7zleI__IkEkmmeam0CIy2UH5j8DeLWXPVq_qa2eo-IrpqUyezCZ0wRChM1Xg_nPAD4wVCLpRNhS8htLXwb3pdsb3RP2Bvnr1_Aape917l66VN2MvyHqWFpRyf6a2Xk1BQcto_9cKXFol7l-A_MkBGVVcjjiDapJD7eIHMt3Yj7z36XIZ8CtltLzgZuB1MAECo_nfurBl2CpvyUwxXLSCEzewqCCYsDAPXC0DksFrX6pTWPjN9rXszbPjW9kRWcE23_3Kd95oPlCWVvOD2-Kwx1zDw5EU-4BQLebL57mb6vIyl1CptHElYcGEbC8qPrzsaw7VjkOA0D4KuBhyccpHfqPOuENMiBjgOdsazoT3AE7CWbEnhx1drjeSC0y2hotF-yzoSvoyATypV6Ke5LhYqpwIQhbX1_oHg7Io93qMT8jiCUaf1h9q_R5JoqgjUiZwv84jl4929D8XnrXNu8PjdqjncHHh-hyRAsEbB-MwQ2O0mIn9EoWOV2AY61Q6GXpsY6l');
+
+/*Table structure for table `companies` */
+
+DROP TABLE IF EXISTS `companies`;
+
+CREATE TABLE `companies` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(50) DEFAULT NULL,
+  `address` varchar(100) DEFAULT NULL,
+  `postal_code` varchar(10) DEFAULT NULL,
+  `city` varchar(100) DEFAULT NULL,
+  `website` varchar(100) DEFAULT NULL,
+  `description` longtext DEFAULT NULL,
+  `looking_for` longtext DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=latin1;
+
+/*Data for the table `companies` */
+
+/*Table structure for table `users` */
+
+DROP TABLE IF EXISTS `users`;
+
+CREATE TABLE `users` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `cv_path` varchar(255) DEFAULT NULL,
+  `linkedin_url` varchar(255) DEFAULT NULL,
+  `is_admin` tinyint(1) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+
+/*Data for the table `users` */
+
+insert  into `users`(`id`,`cv_path`,`linkedin_url`,`is_admin`) values 
+(1,'','macdonalds.com',0);
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
