@@ -9,8 +9,10 @@ Howest Stagebooker is a React-based application that allows HoWest Personal & st
 - [Docker (Desktop)](https://www.docker.com/get-started)
 
 ## Available scripts
-- `npm run start`: This commands builds & deploys a MariaDB container image & start up the server as defined within the [.env](#env) file
-
+- `npm run start`: This container will create a **fully containerized version** of the application.
+- `npm run start:local`: This command builds & deploys a MariaDB container image & start up a **local** express.js server as defined within the [.env](#env) file.
+- `npm run rebuild`: This command will bring all containers offline and rebuild them. 
+  > :question: **Why does this command exists?** You'll need this if you change an `env` variable, because the `start` command doesn't remove your containers, it only stops them.
 # Configuration
 ## `.env`
 |Key|Value explication|Value Example|
@@ -18,7 +20,7 @@ Howest Stagebooker is a React-based application that allows HoWest Personal & st
 |`DATABASE_USER`|The database user designated for the application|Stage_Booker|
 |`DATABASE_PASSWORD`|The database password of the user, used by the application|z$x%*V&z2^*baX|
 |`DATABASE_PORT`|The database port that should be used for the deployed database.|*3306*|
-|`DATABASE_NAME`|The database's name that should be used by the application|
+|`DATABASE_NAME`|The database's name that should be used by the application|stagebooker|
 |`DATABASE_HOST`|The database's host address, used by the application|localhost|
 |`EXPRESS_PORT`|The port used by the application|8080|
 |`AZURE_CLIENTSECRET`|A secret string that the application uses to prove its identity when requesting a token|eqB7Q~usJfWyLOP4YD9U8hDRRL21vboHoO3Ku|
@@ -27,6 +29,7 @@ Howest Stagebooker is a React-based application that allows HoWest Personal & st
 |`EMAIL_SERVER`|The SMTP server that should be used for our mail client.|smtp.live.com|
 |`EMAIL_USERNAME`|The email address you want to use to send mails.|noreply@howeststageplatform.onmicrosoft.com|
 |`EMAIL_PASSWORD`|The password that should be used for our mail client.|P4ssword15486|
+|`EMAIL_PORT`|The port used for the email server|587|
 
 
 # Installation
@@ -35,8 +38,7 @@ Howest Stagebooker is a React-based application that allows HoWest Personal & st
 
 > :exclamation: Still W.I.P. We'll first need to know which platform IT uses. But we're guessing that they might use [App Services](https://azure.microsoft.com/en-us/services/app-service/) on Azure, seeing as they do use a lot of Azure services.
 
-## Development
-### Local-based development
+## Development configuration
 1. Clone the following projects to your local machine using `git clone`:
    - **[React App](https://git.ti.howest.be/TI/2021-2022/s5/project-iv/projects/group-13/react-app):** [https://git.ti.howest.be/TI/2021-2022/s5/project-iv/projects/group-13/react-app](https://git.ti.howest.be/TI/2021-2022/s5/project-iv/projects/group-13/react-app)
    - **[Express Backend](https://git.ti.howest.be/TI/2021-2022/s5/project-iv/projects/group-13/back-end)**: https://git.ti.howest.be/TI/2021-2022/s5/project-iv/projects/group-13/back-end
@@ -59,20 +61,11 @@ Howest Stagebooker is a React-based application that allows HoWest Personal & st
     EMAIL_USERNAME=noreply@howeststageplatform.onmicrosoft.com
     EMAIL_PASSWORD=Test12345678
     ```
-3. In the same directory, run the following command: `npm run start`.
+3. In the same directory, run the following command:
+   - `npm run start` -> **Fully containerized**
+   - `npm run start:local` -> **Local development**
     > :exclamation: Make sure that Docker (Desktop) is running!
-4. Connect to the database with a GUI using:
-    - The root username
-    - The root password
-    - The database port defined in `.env`
-    > :exclamation: Docker uses localhost, so you can just connect with localhost.
-5. Run the [`init_db.sql`](init_db.sql) file to construct the initial database
-    > :sweat: Kinda annoying right? But don't worry, we're currently investigating running this **automatically** when you start the server!
 
 :white_check_mark: **Done!** Normally you should be able to access the application on localhost:`<EXPRESS_PORT>`!
 
 > :bulb: If you also want to configure the front-end, you should continue following the guide [here](https://git.ti.howest.be/TI/2021-2022/s5/project-iv/projects/group-13/react-app/README.md) from step 3.
-
-### Docker-based deployment
-
-> :exclamation: This will be added on a later date. Currently, the back-end doesn't interact nicely with the database and we'll look into this on a later date.

@@ -1,0 +1,12 @@
+### Backend ###
+FROM node:lts-alpine3.14
+
+# Create app directory
+WORKDIR /app
+
+ADD package.json /app/
+RUN npm i --silent
+ADD . /app
+
+EXPOSE 3001
+CMD [ "node", "./index.js"]
