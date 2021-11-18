@@ -36,4 +36,16 @@ function getProfilefile(userId) {
     }
 }
 
-module.exports = { editUserById, uploadCV, getAppointmentsForUser };
+async function cancelAppointmentForUser(userId, appointmentId) {
+    const appointment = await azureRepository.getAppointment(appointmentId);
+
+    if(userId != appointment.customerEmailAddress) {
+        throw "HELABA DA KAN HIER NI HE IEMAND ANDERS ZIJN APPOINTMENT CANCELLEN";
+    }
+    
+    await azureRepository.cancelAppointment(appointmentId);
+
+    return true;
+}
+
+module.exports = { editUserById, uploadCV, getAppointmentsForUser, cancelAppointmentForUser };

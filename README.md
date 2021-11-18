@@ -23,6 +23,14 @@ Howest Stagebooker is a React-based application that allows HoWest Personal & st
 |`DATABASE_NAME`|The database's name that should be used by the application|stagebooker|
 |`DATABASE_HOST`|The database's host address, used by the application|localhost|
 |`EXPRESS_PORT`|The port used by the application|8080|
+|`AZURE_CLIENTSECRET`|A secret string that the application uses to prove its identity when requesting a token|eqB7Q~usJfWyLOP4YD9U8hDRRL21vboHoO3Ku|
+|`AZURE_USERNAME`|The username of the Azure account that the back-end uses to do its API calls|backend@howeststageplatform.onmicrosoft.com|
+|`AZURE_PASSWORD`|The password of the Azure account that the back-end uses to do its API calls|P4ssword15486|
+|`EMAIL_SERVER`|The SMTP server that should be used for our mail client.|smtp.live.com|
+|`EMAIL_USERNAME`|The email address you want to use to send mails.|noreply@howeststageplatform.onmicrosoft.com|
+|`EMAIL_PASSWORD`|The password that should be used for our mail client.|P4ssword15486|
+|`EMAIL_PORT`|The port used for the email server|587|
+
 
 # Installation
 ## Production
@@ -30,34 +38,34 @@ Howest Stagebooker is a React-based application that allows HoWest Personal & st
 
 > :exclamation: Still W.I.P. We'll first need to know which platform IT uses. But we're guessing that they might use [App Services](https://azure.microsoft.com/en-us/services/app-service/) on Azure, seeing as they do use a lot of Azure services.
 
-## Development
-### Local-based development
+## Development configuration
 1. Clone the following projects to your local machine using `git clone`:
    - **[React App](https://git.ti.howest.be/TI/2021-2022/s5/project-iv/projects/group-13/react-app):** [https://git.ti.howest.be/TI/2021-2022/s5/project-iv/projects/group-13/react-app](https://git.ti.howest.be/TI/2021-2022/s5/project-iv/projects/group-13/react-app)
    - **[Express Backend](https://git.ti.howest.be/TI/2021-2022/s5/project-iv/projects/group-13/back-end)**: https://git.ti.howest.be/TI/2021-2022/s5/project-iv/projects/group-13/back-end
 2. In the `back-end` directory, create a `.env` file. The explication of each variable, you can find [here](#env), but here's a example:
     ```dotenv
+    EXPRESS_PORT=3001
+
+    DATABASE_HOST=127.0.0.1
     DATABASE_PORT=3306
-    DATABASE_PASSWORD=Friday13th!
-    DATABASE_NAME=StageBooker
+    DATABASE_PASSWORD=TypescriptOnTop123!
+    DATABASE_NAME=stagebooker
     DATABASE_USER=root
-    DATABASE_HOST=localhost
-    EXPRESS_PORT=8080
+
+    AZURE_CLIENTSECRET=eaZ4O~usJLbgRHL1Y9MU8RPX2L72vb1H678Ku
+    AZURE_USERNAME=adriaandesaeger@howeststageplatform.onmicrosoft.com
+    AZURE_PASSWORD=NextJSyes
+
+    EMAIL_SERVER=smtp.live.com
+    EMAIL_PORT=587
+    EMAIL_USERNAME=noreply@howeststageplatform.onmicrosoft.com
+    EMAIL_PASSWORD=Test12345678
     ```
-3. In the same directory, run the following command: `npm run start`.
+3. In the same directory, run the following command:
+   - `npm run start` -> **Fully containerized**
+   - `npm run start:local` -> **Local development**
     > :exclamation: Make sure that Docker (Desktop) is running!
-4. Connect to the database with a GUI using:
-    - The root username
-    - The root password
-    - The database port defined in `.env`
-    > :exclamation: Docker uses localhost, so you can just connect with localhost.
-5. Run the [`init_db.sql`](init_db.sql) file to construct the initial database
-    > :sweat: Kinda annoying right? But don't worry, we're currently investigating running this **automatically** when you start the server!
 
 :white_check_mark: **Done!** Normally you should be able to access the application on localhost:`<EXPRESS_PORT>`!
 
 > :bulb: If you also want to configure the front-end, you should continue following the guide [here](https://git.ti.howest.be/TI/2021-2022/s5/project-iv/projects/group-13/react-app/README.md) from step 3.
-
-### Docker-based deployment
-
-> :exclamation: This will be added on a later date. Currently, the back-end doesn't interact nicely with the database and we'll look into this on a later date.
