@@ -10,6 +10,11 @@ schemes:
 - "http"
 host: localhost:3000
 basePath: /api
+securityDefinitions:
+  CompanyAuth:
+    type: apiKey
+    name: Authorization
+    in: header
 paths:
   /user:
     get:
@@ -92,6 +97,16 @@ paths:
             type: array
             items:
               $ref: "#/definitions/Company"
+  /companies/me:
+    get:
+      tags:
+        - Companies
+      summary: "Get info about my company"
+      security:
+        - CompanyAuth: []
+      responses:
+        "200":
+          description: "Succesful, got info about the company"
   /companies/csv:
     post:
       tags:
@@ -155,6 +170,40 @@ paths:
           description: "Succesful, returns the deleted company"
           schema:
             $ref: "#/definitions/Company"
+  /companies/{companyEmail}/generatemagiclink:
+    post:
+      tags:
+        - Companies
+      summary: "Generate magic link to sign in as a company"
+      parameters:
+        - in: path
+          name: companyEmail
+          required: true
+          type: string
+      responses:
+        "200":
+          description: "Great success, magic link sent via mail"
+          schema:
+            type: object
+            properties:
+              result:
+                type: boolean
+  /companies/signin/{token}:
+    get:
+      tags:
+        - Companies
+      summary: "Sign in using your magic link token and receive a JWT"
+      parameters:
+        - in: path
+          name: token
+          required: true
+          type: string
+      responses:
+        "200":
+          description: "Great success, returns the JWT"
+          schema:
+            type: string
+            example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb21wYW55SWQiOjEzMiwiaWF0IjoxNjM3MjQzNjgxfQ.c5dHIMOS4GwNuBW4rC2U1bx66faIAGFzV5NlBIGriZ8"
 definitions:
   User:
     type: object
@@ -195,6 +244,13 @@ definitions:
           address:
             type: string
             example: "Rijselstraat 5"
+          email:
+            type: string
+            format: email
+            example: "benjamin.robbe@student.howest.be"
+          phone_number:
+            type: string
+            example: "1234567890"
           postalcode:
             type: string
             example: "8000"
@@ -208,8 +264,6 @@ definitions:
           lookingfor:
             type: string
             example: "Gedreven IT-ers voor onze kiosk toepassing."
-          contactperson:
-            $ref: "#/definitions/ContactPerson"
   EditCompany:
     type: object
     properties:
@@ -222,6 +276,13 @@ definitions:
       address:
         type: string
         example: "Rijselstraat 5"
+      email:
+        type: string
+        format: email
+        example: "benjamin.robbe@student.howest.be"
+      phone_number:
+        type: string
+        example: "1234567890"
       postalcode:
         type: string
         example: "8000"
@@ -235,16 +296,3 @@ definitions:
       lookingfor:
         type: string
         example: "Gedreven IT-ers voor onze kiosk toepassing."
-      contactperson:
-        $ref: "#/definitions/ContactPerson"
-  ContactPerson:
-    type: object
-    properties:
-      id:
-        type: integer
-      name:
-        type: string
-      email:
-        type: string
-      phone_number:
-        type: string
