@@ -6,7 +6,6 @@
   "scripts": {
     "start": "docker-compose stop && docker-compose up -d",
     "start:local": "docker-compose stop && docker-compose up -d mariadb && nodemon ./index.js",
-    "start:plain": "nodemon ./index.js",
     "rebuild": "docker-compose down && docker build -f ./docker/DB . && docker build -f ./docker/Express ."
   },
   "repository": {
