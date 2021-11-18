@@ -9,10 +9,11 @@ Howest Stagebooker is a React-based application that allows HoWest Personal & st
 - [Docker (Desktop)](https://www.docker.com/get-started)
 
 ## Available scripts
-- `npm run dev`: This command builds & deploys a MariaDB container image & start up a **local** express.js server as defined within the [.env](#env) file.
+- `npm run start`: This container will create a **fully containerized version** of the application that has hot-reload capabilities.
+- `npm run start:local`: This command builds & deploys a MariaDB container image & start up a **local** express.js server as defined within the [.env](#env) file.
 - `npm run rebuild`: This command will bring all containers offline and rebuild them. 
-  > :question: **Why does this command exists?** You'll need this if you change an `env` variable, because the `start` command doesn't remove your containers, it only stops them. 
-- `npm run dockerize`: This will dockerize all code and run a complete containerized back-end that is reachable at the `<EXPRESS_PORT>`
+  > :question: **Why does this command exists?** You'll need this if you change an `env` variable, because the `start` command doesn't remove your containers, it only stops them.
+- `npm run start:plain`: This command runs the code without running any containers it depends on. 
 # Configuration
 ## `.env`
 |Key|Value explication|Value Example|

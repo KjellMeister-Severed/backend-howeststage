@@ -6,8 +6,8 @@ services:
     restart: always
     container_name: MariaDB
     build: 
+      dockerfile: /docker/DB
       context: .
-      dockerfile: ./docker/DB
     environment: 
       MYSQL_ROOT_PASSWORD:
         "${DATABASE_PASSWORD}"
@@ -23,16 +23,21 @@ services:
       - ${DATABASE_PORT}:3306
 
   express:
-    image: node:16
-    restart: always
+    image: node:lts-alpine3.14
     container_name: ExpressJS
     depends_on:
       - mariadb
     build:
+      dockerfile: /docker/Express
       context: . 
-      dockerfile: ./docker/Express
     ports:
       - ${EXPRESS_PORT}:3001
     environment:
       - EXPRESS_PORT=3001
       - DATABASE_HOST=mariadb
+    volumes:
+      - .:/usr/src/app
+      - node_modules:/usr/src/app/node_modules
+    
+volumes:
+  node_modules: {}

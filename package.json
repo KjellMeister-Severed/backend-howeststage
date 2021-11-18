@@ -4,8 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dockerize": "docker-compose stop && docker-compose up -d --build",
-    "dev": "docker-compose stop && docker-compose up -d mariadb && nodemon ./index.js",
+    "start": "docker-compose stop && docker-compose up -d",
+    "start:local": "docker-compose stop && docker-compose up -d mariadb && nodemon ./index.js",
+    "start:plain": "nodemon ./index.js",
     "rebuild": "docker-compose down && docker build -f ./docker/DB . && docker build -f ./docker/Express ."
   },
   "repository": {
@@ -26,11 +27,9 @@
     "install": "^0.13.0",
     "mysql": "^2.18.1",
     "node-fetch": "^2.6.6",
+    "nodemon": "^2.0.15",
     "npm": "^8.1.3",
     "path": "^0.12.7",
     "strip-bom-stream": "^4.0.0"
-  },
-  "devDependencies": {
-    "nodemon": "^2.0.15"
   }
 }
