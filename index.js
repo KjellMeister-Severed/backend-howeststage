@@ -115,7 +115,6 @@ router.get("/companies/:companyId/appointments", async (req, res, next) => {
     } catch (err) {
         next(err);
     }
-
 });
 
 // Edit company
