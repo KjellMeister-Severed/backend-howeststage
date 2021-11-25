@@ -10,11 +10,19 @@ const azureRepository = require("../repositories/azure_repository");
 const mailService = require("../services/mail_service");
 
 async function getCompanies() {
-  return await companyRepository.getAllCompanies();
+  let companies = await companyRepository.getAllCompanies();
+
+  companies.forEach(company => {
+    company.bookingsUrl = process.env.BOOKINGS_URL;
+  });
+
+  return companies;
 }
 
 async function getCompanyById(companyId) {
-  return await companyRepository.getCompanyById(companyId);
+  let company = await companyRepository.getCompanyById(companyId);
+  company.bookingsUrl = process.env.BOOKINGS_URL;
+  return company;
 }
 
 async function listAppointmentsForCompany(companyId) {
