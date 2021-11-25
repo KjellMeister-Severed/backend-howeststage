@@ -49,6 +49,57 @@ async function addCompany(company) {
     });
 }
 
+async function deleteOldMagicLinksForCompany(companyId) {
+    return new Promise((resolve) => {
+        database.executeQuery((connection) => {
+            connection.query(`DELETE FROM magic_links WHERE company_id = ?`,
+            companyId,
+            async function (err) {
+                if (err) throw err;
+
+                resolve(true);
+            });
+        });
+    });
+}
+
+async function addMagicLinkToken(token, companyId) {
+    return new Promise((resolve) => {
+        const date = new Date();
+        date.setDate(date.getDate() + 1); 
+
+        database.executeQuery((connection) => {
+            connection.query(`INSERT INTO magic_links (token, company_id, expiry) 
+            VALUES(?, ?, ?)`,
+            [token, companyId, date],
+            async function (err, result) {
+                if (err) throw err;
+
+                resolve(true);
+            });
+        });
+    });
+}
+
+async function getMagicLink(token) {
+    return new Promise((resolve) => {
+        const date = new Date();
+        date.setDate(date.getDate() + 1); 
+
+        database.executeQuery((connection) => {
+            connection.query(`SELECT token, company_id, expiry FROM magic_links
+            WHERE token = ? AND expiry > CURRENT_DATE()`,
+            [token],
+            async function (err, result) {
+                if (err) throw err;
+
+                resolve(rowToMagicLink(result[0]));
+            });
+        });
+    });
+}
+
+
 // Fill up the edit properties that are null with the current properties
 function fillEmptyEditProperties(editCompany, currentCompany) {
     editCompany.name =  editCompany.name ? editCompany.name : currentCompany.name;
@@ -135,4 +186,13 @@ function rowToCompany(row) {
     };
 }
 
-module.exports = { getAllCompanies, getCompanyById, deleteCompanyById, addCompany, editCompanyById, setBookingsId }
+function rowToMagicLink(row) {
+    return {
+        token: row.token,
+        companyId: row.company_id,
+        expiry: row.expiry
+    };
+}
+
+module.exports = { getAllCompanies, getCompanyById, deleteCompanyById, addCompany, editCompanyById, deleteOldMagicLinksForCompany
+    , setBookingsId, addMagicLinkToken, getMagicLink }

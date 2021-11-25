@@ -4,6 +4,7 @@ const express = require("express");
 const fileUpload = require("express-fileupload");
 const colors = require('colors');
 const cors = require('cors');
+const jwt = require('jsonwebtoken');
 
 const app = express();
 app.use(express.json())
@@ -12,13 +13,20 @@ app.use(cors());
 
 const userController = require("./controllers/user_controller");
 const companyController = require("./controllers/company_controller");
-const mailService = require("./services/mail_service");
 
 /*
     API requests
 */
 const router = express.Router()
 app.use('/api', router)
+
+// Get my company
+router.get("/companies/me", async (req, res) => {
+    const authHeader = req.headers['authorization'];
+    const token = authHeader.split(' ')[1];
+    const decoded = jwt.verify(token, process.env.JWT_KEY);
+    res.status(200).json(await companyController.getCompanyById(decoded.companyId));
+});
 
 // Get companies
 router.get("/companies", async (req, res) => {
@@ -71,8 +79,21 @@ router.delete("/companies/:companyId", async (req, res) => {
     return res.status(200).json(deletedCompany);
 })
 
+// Company magic link generation
+router.post("/companies/:companyId/generatemagiclink", async (req, res) => {
+    const companyId = req.params.companyId;
+    res.status(200).json({result: await companyController.generateMagicLink(companyId)});
+});
+
+// Company magic link sign in
+app.get("/signin/:token", async (req, res) => {
+    const token = req.params.token;
+    const jwt = await companyController.signInWithToken(token);
+    res.status(302).redirect(`${process.env.MAGICLINK_REDIRECT_URL}?token=${jwt}`);
+});
+
 // Edit user
-router.patch("/users", async (req, res) => {
+router.patch("/user", async (req, res) => {
     const editedUser = await userController.editUserById(1, req.body);
     return res.status(200).json(editedUser);
 });

@@ -2,9 +2,12 @@ const fs = require('fs');
 const path = require("path");
 const csv = require('csv-parser');
 const stripBom = require('strip-bom-stream');
+const jwt = require('jsonwebtoken');
+
 
 const companyRepository = require("../repositories/company_repository");
 const azureRepository = require("../repositories/azure_repository");
+const mailService = require("../services/mail_service");
 
 async function getCompanies() {
   return await companyRepository.getAllCompanies();
@@ -35,6 +38,32 @@ async function deleteCompany(companyId) {
   await azureRepository.deleteEmployee(deletedCompany.bookingsid);
 
   return deleteCompany;
+}
+
+async function generateMagicLink(companyId) {
+  const company = await companyRepository.getCompanyById(companyId);
+  const generatedToken = generateToken();
+
+  await companyRepository.deleteOldMagicLinksForCompany(company.id);
+  await companyRepository.addMagicLinkToken(generatedToken, company.id);
+  
+  await mailService.sendMail(company.email, "Link for your Howest Internship Platform account",
+  `
+  Hi there
+  
+  Here is the link to login to your accounts on our platform: http://127.0.0.1/signin/${generatedToken}
+  
+  Kind regards
+  Howest University of Applied Sciences
+  `);
+
+  return true;
+}
+
+async function signInWithToken(token) {
+  const magicLink = await companyRepository.getMagicLink(token);
+  await companyRepository.deleteOldMagicLinksForCompany(magicLink.companyId);
+  return jwt.sign({companyId: magicLink.companyId}, process.env.JWT_KEY);
 }
 
 
@@ -91,5 +120,11 @@ function addCompaniesFromCSV(csvFileUrl) {
   });
 }
 
+function generateToken() {
+  const epochSeconds = Date.now()
+  const randomString = Math.random().toString(36).substr(2);
+  return epochSeconds + randomString;
+}
+
 module.exports = { getCompanies, getCompanyById, addCompany, editCompany, deleteCompany, 
-  uploadCSV, addCompaniesFromCSV, listAppointmentsForCompany };
+  uploadCSV, addCompaniesFromCSV, listAppointmentsForCompany, generateMagicLink, signInWithToken };
