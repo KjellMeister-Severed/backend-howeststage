@@ -71,4 +71,4 @@ function rowToUser(row) {
     }
 }
 
-module.exports = { editUserById };
+module.exports = { getUserById, editUserById };

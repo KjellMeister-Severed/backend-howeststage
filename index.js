@@ -165,6 +165,16 @@ app.get("/signin/:token", async (req, res, next) => {
     }    
 });
 
+// Get user info
+router.get("/user", authenticateJWT, async (req, res, next) => {
+    try{
+        const user = await userController.getUserById(req.userInfo.userPrincipalName);
+        return res.status(200).json(user);    
+    }catch(err){
+        next(err);
+    }
+});
+
 // Edit user
 router.patch("/user", authenticateJWT, async (req, res, next) => {
     try{
@@ -173,7 +183,6 @@ router.patch("/user", authenticateJWT, async (req, res, next) => {
     }catch(err){
         next(err);
     }
-    
 });
 
 // Get appointments for user
