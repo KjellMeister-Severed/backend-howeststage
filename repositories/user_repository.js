@@ -2,12 +2,12 @@ const database = require("../services/database");
 const azureRepository = require("./azure_repository");
 
 async function createUser(id) {
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
         database.executeQuery((connection) => {
             connection.query(`INSERT INTO users (id) VALUES (?)`,
             [id],
             async function (err) {
-                if (err) throw err;
+                if (err) return reject(err);
 
                 resolve(true);
             });
@@ -21,7 +21,7 @@ async function getUserById(id) {
             connection.query(`SELECT id, cv_path, linkedin_url, is_admin FROM users WHERE id = ?`,
             [id],
             async function (err, result) {
-                if (err) throw err;
+                if (err) return reject(err);
 
                 resolve(rowToUser(result[0]));
             });
@@ -34,14 +34,14 @@ async function editUserById(id, editUser) {
 
     const { linkedin_url } = fillEmptyEditProperties(editUser, currentUser);
 
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
         database.executeQuery((connection) => {
             connection.query(`UPDATE users
             SET linkedin_url = ? 
             WHERE id = ?`,
             [linkedin_url, id],
             async function (err) {
-                if (err) throw err;
+                if (err) return reject(err);
 
                 const editedUser = await getUserById(id);
                 resolve(editedUser);
