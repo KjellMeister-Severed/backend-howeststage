@@ -10,6 +10,10 @@ async function getAppointmentsForUser(userPrincipalName) {
     return await azureRepository.listAppointmentsForUser(userPrincipalName);
 }
 
+async function getUserById(id) {
+    return await userRepository.getUserById(id);
+}
+
 async function editUserById(id, editUser) {
     return await userRepository.editUserById(id, editUser);
 }
@@ -52,4 +56,4 @@ async function cancelAppointmentForUser(userId, appointmentId) {
     return true;
 }
 
-module.exports = { getAzureUserInfo, editUserById, uploadCV, getAppointmentsForUser, cancelAppointmentForUser };
+module.exports = { getAzureUserInfo, getUserById, editUserById, uploadCV, getAppointmentsForUser, cancelAppointmentForUser };
