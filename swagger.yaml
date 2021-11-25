@@ -15,12 +15,18 @@ securityDefinitions:
     type: apiKey
     name: Authorization
     in: header
+  AzureAuth:
+    type: apiKey
+    name: Authorization
+    in: header
 paths:
   /user:
     get:
       tags:
         - Users
       summary: "Retrieve information about the currently logged in user"
+      security:
+        - AzureAuth: []
       responses:
         "200":
           description: "Succesful, returns the user information"
@@ -30,6 +36,8 @@ paths:
       tags:
         - Users
       summary: "Edit the settings of the logged in user"
+      security:
+        - AzureAuth: []
       parameters:
       - in: body
         name: cv_path
@@ -54,6 +62,8 @@ paths:
       tags:
         - Users
       summary: "Download the user's uploaded CV"
+      security:
+        - AzureAuth: []
       responses:
         "200":
           description: "Succesful, returns file download"
@@ -90,6 +100,8 @@ paths:
       tags:
         - Users
       summary: "Get a user's appointments using his ID"
+      security:
+        - AzureAuth: []
       parameters:
         - in: path
           name: userId
