@@ -166,9 +166,9 @@ app.get("/signin/:token", async (req, res, next) => {
 });
 
 // Edit user
-router.patch("/user", async (req, res, next) => {
+router.patch("/user", authenticateJWT, async (req, res, next) => {
     try{
-        const editedUser = await userController.editUserById(1, req.body);
+        const editedUser = await userController.editUserById(req.userInfo.userPrincipalName, req.body);
         return res.status(200).json(editedUser);    
     }catch(err){
         next(err);
@@ -205,9 +205,9 @@ router.post("/user/:userId/appointments/:appointmentId/cancel", async (req, res,
 });
 
 // Download CV
-router.get("/user/cv", (req, res, next) => {
+router.get("/user/cv", authenticateJWT, (req, res, next) => {
     try{
-        res.download("./private/cv/1.pdf");
+        res.download(`./private/cv/${req.userInfo.userPrincipalName}.pdf`);
     }catch(err){
         next(err);
     }
@@ -215,9 +215,9 @@ router.get("/user/cv", (req, res, next) => {
 });
 
 // Upload CV
-router.post("/user/cv", async (req, res, next) => {
+router.post("/user/cv", authenticateJWT ,async (req, res, next) => {
     try{
-        const result = userController.uploadCV(1, req.files.cv);
+        const result = userController.uploadCV(req.userInfo.userPrincipalName, req.files.cv);
         return res.status(200).json(result);
     } catch(err){
         next(err);

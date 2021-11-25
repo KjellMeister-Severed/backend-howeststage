@@ -5,7 +5,7 @@ async function createUser(id) {
     return new Promise((resolve, reject) => {
         database.executeQuery((connection) => {
             connection.query(`INSERT INTO users (id) VALUES (?)`,
-            [id],
+            id,
             async function (err) {
                 if (err) return reject(err);
 
@@ -23,6 +23,8 @@ async function getUserById(id) {
             async function (err, result) {
                 if (err) return reject(err);
 
+                if(result.length == 0) resolve(null);
+
                 resolve(rowToUser(result[0]));
             });
         });
@@ -31,6 +33,10 @@ async function getUserById(id) {
 
 async function editUserById(id, editUser) {
     const currentUser = await getUserById(id);
+
+    if(currentUser == null) {
+        await createUser(id);
+    }
 
     const { linkedin_url } = fillEmptyEditProperties(editUser, currentUser);
 
