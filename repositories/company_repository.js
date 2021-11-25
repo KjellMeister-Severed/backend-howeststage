@@ -32,6 +32,44 @@ async function getCompanyById(id) {
     });
 }
 
+async function getCompanyByName(name) {
+    return new Promise((resolve, reject) => {
+        database.executeQuery((connection) => {
+            connection.query(`SELECT id, name, email, phone_number, address, postal_code, city, website, description, looking_for, bookings_id
+            FROM companies WHERE name = ?`,
+            name,
+            function (err, result) {
+                if (err) return reject(err);
+
+                if(result.length == 0) {
+                    return reject(`Company with id ${id} not found.`);
+                }
+
+                resolve(rowToCompany(result[0]));
+            });
+        });
+    });
+}
+
+async function getCompanyByEmail(name) {
+    return new Promise((resolve, reject) => {
+        database.executeQuery((connection) => {
+            connection.query(`SELECT id, name, email, phone_number, address, postal_code, city, website, description, looking_for, bookings_id
+            FROM companies WHERE email = ?`,
+            email,
+            function (err, result) {
+                if (err) return reject(err);
+
+                if(result.length == 0) {
+                    return reject(`Company with id ${id} not found.`);
+                }
+
+                resolve(rowToCompany(result[0]));
+            });
+        });
+    });
+}
+
 async function addCompany(company) {
     return new Promise((resolve, reject) => {
         database.executeQuery((connection) => {
@@ -194,5 +232,5 @@ function rowToMagicLink(row) {
     };
 }
 
-module.exports = { getAllCompanies, getCompanyById, deleteCompanyById, addCompany, editCompanyById, deleteOldMagicLinksForCompany
+module.exports = { getAllCompanies, getCompanyById, getCompanyByName, getCompanyByEmail, deleteCompanyById, addCompany, editCompanyById, deleteOldMagicLinksForCompany
     , setBookingsId, addMagicLinkToken, getMagicLink }
