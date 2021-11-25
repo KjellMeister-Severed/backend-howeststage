@@ -170,16 +170,16 @@ paths:
           description: "Succesful, returns the deleted company"
           schema:
             $ref: "#/definitions/Company"
-  /companies/{companyEmail}/generatemagiclink:
+  /companies/{companyId}/generatemagiclink:
     post:
       tags:
         - Companies
       summary: "Generate magic link to sign in as a company"
       parameters:
         - in: path
-          name: companyEmail
+          name: companyId
           required: true
-          type: string
+          type: integer
       responses:
         "200":
           description: "Great success, magic link sent via mail"
@@ -188,22 +188,6 @@ paths:
             properties:
               result:
                 type: boolean
-  /companies/signin/{token}:
-    get:
-      tags:
-        - Companies
-      summary: "Sign in using your magic link token and receive a JWT"
-      parameters:
-        - in: path
-          name: token
-          required: true
-          type: string
-      responses:
-        "200":
-          description: "Great success, returns the JWT"
-          schema:
-            type: string
-            example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb21wYW55SWQiOjEzMiwiaWF0IjoxNjM3MjQzNjgxfQ.c5dHIMOS4GwNuBW4rC2U1bx66faIAGFzV5NlBIGriZ8"
 definitions:
   User:
     type: object
