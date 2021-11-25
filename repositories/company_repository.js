@@ -2,11 +2,11 @@ const database = require("../services/database");
 const azureRepository = require("../repositories/azure_repository");
 
 async function getAllCompanies() {
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
         database.executeQuery((connection) => {
             connection.query(`SELECT id, name, email, phone_number, address, postal_code, city, website, description, looking_for, bookings_id 
             FROM companies`, function (err, result) {
-                if (err) throw err;
+                if (err) return reject(err);
                 resolve(result.map(rowToCompany));
             });
         });
@@ -14,16 +14,54 @@ async function getAllCompanies() {
 }
 
 async function getCompanyById(id) {
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
         database.executeQuery((connection) => {
             connection.query(`SELECT id, name, email, phone_number, address, postal_code, city, website, description, looking_for, bookings_id
             FROM companies WHERE id = ?`,
             id,
             function (err, result) {
-                if (err) throw err;
+                if (err) return reject(err);
 
                 if(result.length == 0) {
-                    throw `Company with id ${id} not found.`;
+                    return reject(`Company with id ${id} not found.`);
+                }
+
+                resolve(rowToCompany(result[0]));
+            });
+        });
+    });
+}
+
+async function getCompanyByName(name) {
+    return new Promise((resolve, reject) => {
+        database.executeQuery((connection) => {
+            connection.query(`SELECT id, name, email, phone_number, address, postal_code, city, website, description, looking_for, bookings_id
+            FROM companies WHERE name = ?`,
+            name,
+            function (err, result) {
+                if (err) return reject(err);
+
+                if(result.length == 0) {
+                    return reject(`Company with id ${id} not found.`);
+                }
+
+                resolve(rowToCompany(result[0]));
+            });
+        });
+    });
+}
+
+async function getCompanyByEmail(name) {
+    return new Promise((resolve, reject) => {
+        database.executeQuery((connection) => {
+            connection.query(`SELECT id, name, email, phone_number, address, postal_code, city, website, description, looking_for, bookings_id
+            FROM companies WHERE email = ?`,
+            email,
+            function (err, result) {
+                if (err) return reject(err);
+
+                if(result.length == 0) {
+                    return reject(`Company with id ${id} not found.`);
                 }
 
                 resolve(rowToCompany(result[0]));
@@ -33,14 +71,14 @@ async function getCompanyById(id) {
 }
 
 async function addCompany(company) {
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
         database.executeQuery((connection) => {
             connection.query(`INSERT INTO companies (name, email, phone_number, address, postal_code, city, website,
                 description, looking_for) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)`,
             [company.name, company.email, company.phonenumber, company.address, company.postalcode, company.city, company.website,
             company.description, company.lookingfor],
             async function (err, result) {
-                if (err) throw err;
+                if (err) return reject(err);
 
                 const addedCompany = await getCompanyById(result.insertId);
                 resolve(addedCompany);
@@ -50,12 +88,12 @@ async function addCompany(company) {
 }
 
 async function deleteOldMagicLinksForCompany(companyId) {
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
         database.executeQuery((connection) => {
             connection.query(`DELETE FROM magic_links WHERE company_id = ?`,
             companyId,
             async function (err) {
-                if (err) throw err;
+                if (err) return reject(err);
 
                 resolve(true);
             });
@@ -64,7 +102,7 @@ async function deleteOldMagicLinksForCompany(companyId) {
 }
 
 async function addMagicLinkToken(token, companyId) {
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
         const date = new Date();
         date.setDate(date.getDate() + 1); 
 
@@ -73,7 +111,7 @@ async function addMagicLinkToken(token, companyId) {
             VALUES(?, ?, ?)`,
             [token, companyId, date],
             async function (err, result) {
-                if (err) throw err;
+                if (err) return reject(err);
 
                 resolve(true);
             });
@@ -82,7 +120,7 @@ async function addMagicLinkToken(token, companyId) {
 }
 
 async function getMagicLink(token) {
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
         const date = new Date();
         date.setDate(date.getDate() + 1); 
 
@@ -91,7 +129,7 @@ async function getMagicLink(token) {
             WHERE token = ? AND expiry > CURRENT_DATE()`,
             [token],
             async function (err, result) {
-                if (err) throw err;
+                if (err) return reject(err);
 
                 resolve(rowToMagicLink(result[0]));
             });
@@ -120,7 +158,7 @@ async function editCompanyById(id, editCompany) {
 
     const { name, email, phonenumber, address, postalcode, city, website, description, lookingfor } = fillEmptyEditProperties(editCompany, currentCompany);
 
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
         database.executeQuery((connection) => {
             connection.query(`UPDATE companies
             SET name = ?, email = ?, phone_number = ?, address = ?, postal_code = ?, city = ?, website = ?, description = ?, 
@@ -129,7 +167,7 @@ async function editCompanyById(id, editCompany) {
             [name, email, phonenumber, address, postalcode, city, website,
             description, lookingfor, id],
             async function (err, result) {
-                if (err) throw err;
+                if (err) return reject(err);
 
                 const editedCompany = await getCompanyById(id);
                 resolve(editedCompany);
@@ -139,14 +177,14 @@ async function editCompanyById(id, editCompany) {
 }
 
 async function setBookingsId(companyId, bookingsId) {
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
         database.executeQuery((connection) => {
             connection.query(`UPDATE companies
             SET bookings_id = ?
             WHERE id = ?`,
             [bookingsId, companyId],
             function (err) {
-                if (err) throw err;
+                if (err) return reject(err);
 
                 resolve(true);
             });
@@ -157,12 +195,12 @@ async function setBookingsId(companyId, bookingsId) {
 async function deleteCompanyById(id) {
     const deletedCompany = await getCompanyById(id);
 
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
         database.executeQuery((connection) => {
             connection.query(`DELETE FROM companies WHERE id = ?`,
             id,
             function (err) {
-                if (err) throw err;
+                if (err) return reject(err);
 
                 resolve(deletedCompany);
             });
@@ -194,5 +232,5 @@ function rowToMagicLink(row) {
     };
 }
 
-module.exports = { getAllCompanies, getCompanyById, deleteCompanyById, addCompany, editCompanyById, deleteOldMagicLinksForCompany
+module.exports = { getAllCompanies, getCompanyById, getCompanyByName, getCompanyByEmail, deleteCompanyById, addCompany, editCompanyById, deleteOldMagicLinksForCompany
     , setBookingsId, addMagicLinkToken, getMagicLink }

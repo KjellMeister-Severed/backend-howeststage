@@ -20,9 +20,9 @@ async function getCompanies() {
 }
 
 async function getCompanyById(companyId) {
-  let company = await companyRepository.getCompanyById(companyId);
-  company.bookingsUrl = process.env.BOOKINGS_URL;
-  return company;
+    let company = await companyRepository.getCompanyById(companyId);
+    company.bookingsUrl = process.env.BOOKINGS_URL;
+    return company;
 }
 
 async function listAppointmentsForCompany(companyId) {
@@ -31,6 +31,13 @@ async function listAppointmentsForCompany(companyId) {
 }
 
 async function addCompany(companyObject) {
+  if(await companyRepository.getCompanyByName(companyObject.name)) {
+    throw "There is already a company with this name.";
+  }
+
+  if(await companyRepository.getCompanyByEmail(companyObject.email)) {
+    throw "There is already a company with this email.";
+  }
   const newCompany = await companyRepository.addCompany(companyObject);
   const employee = await azureRepository.addEmployee(newCompany);
   await companyRepository.setBookingsId(newCompany.id, employee.id);
