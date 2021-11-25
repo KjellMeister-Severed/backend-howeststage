@@ -80,16 +80,16 @@ router.delete("/companies/:companyId", async (req, res) => {
 })
 
 // Company magic link generation
-router.get("/companies/:companyId/generatemagiclink", async (req, res) => {
+router.post("/companies/:companyId/generatemagiclink", async (req, res) => {
     const companyId = req.params.companyId;
     res.status(200).json({result: await companyController.generateMagicLink(companyId)});
 });
 
 // Company magic link sign in
-router.post("/companies/signin/:token", async (req, res) => {
+app.get("/signin/:token", async (req, res) => {
     const token = req.params.token;
     const jwt = await companyController.signInWithToken(token);
-    res.status(200).json(jwt);
+    res.status(302).redirect(`${process.env.MAGICLINK_REDIRECT_URL}?token=${jwt}`);
 });
 
 // Edit user

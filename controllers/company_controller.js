@@ -51,7 +51,7 @@ async function generateMagicLink(companyId) {
   `
   Hi there
   
-  Here is the link to login to your accounts on our platform: http://127.0.0.1/companysignin/${generatedToken}
+  Here is the link to login to your accounts on our platform: http://127.0.0.1/signin/${generatedToken}
   
   Kind regards
   Howest University of Applied Sciences
