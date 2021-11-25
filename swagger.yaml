@@ -96,7 +96,7 @@ paths:
           schema:
             type: array
             items:
-              $ref: "#/definitions/Company"
+              $ref: "#/definitions/DetailedCompany"
   /companies/me:
     get:
       tags:
@@ -248,6 +248,10 @@ definitions:
           lookingfor:
             type: string
             example: "Gedreven IT-ers voor onze kiosk toepassing."
+          bookingsUrl:
+            type: string
+            format: url
+            example: "https://outlook.office365.com/owa/calendar/HowestStagemarkt@howeststageplatform.onmicrosoft.com/bookings/"
   EditCompany:
     type: object
     properties:
