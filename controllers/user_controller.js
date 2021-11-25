@@ -2,6 +2,10 @@ const path = require("path");
 const userRepository = require("../repositories/user_repository");
 const azureRepository = require("../repositories/azure_repository");
 
+async function getAzureUserInfo(token) {
+    return await azureRepository.getUserInfo(token);
+}
+
 async function getAppointmentsForUser(userPrincipalName) {
     return await azureRepository.listAppointmentsForUser(userPrincipalName);
 }
@@ -48,4 +52,4 @@ async function cancelAppointmentForUser(userId, appointmentId) {
     return true;
 }
 
-module.exports = { editUserById, uploadCV, getAppointmentsForUser, cancelAppointmentForUser };
+module.exports = { getAzureUserInfo, editUserById, uploadCV, getAppointmentsForUser, cancelAppointmentForUser };

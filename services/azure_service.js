@@ -36,12 +36,12 @@ async function getToken() {
     });
 }
 
-async function fetchFromGraph(method, endpoint, body) {
+async function fetchFromGraph(method, endpoint, body, token=null) {
     let requestOptions = {
         method: method,
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${await getToken()}`
+            'Authorization': `Bearer ${token ? token : await getToken()}`
         },
     }
 

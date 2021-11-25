@@ -1,6 +1,10 @@
 const azureService = require("../services/azure_service");
 const STAGEMARKT_BOOKING_BUSINESS = "HowestStagemarkt@howeststageplatform.onmicrosoft.com"; 
 
+async function getUserInfo(token) {
+    return azureService.fetchFromGraph("GET", `me`, null, token);
+}
+
 async function addEmployee(company) {
     return await azureService.fetchFromGraph("POST", 
     `bookingBusinesses/${STAGEMARKT_BOOKING_BUSINESS}/staffMembers`, {
@@ -43,4 +47,4 @@ async function cancelAppointment(appointmentId) {
     });
 }
 
-module.exports = { addEmployee, deleteEmployee, listAppointmentsForCompany, listAppointmentsForUser, cancelAppointment, getAppointment };
+module.exports = { getUserInfo, addEmployee, deleteEmployee, listAppointmentsForCompany, listAppointmentsForUser, cancelAppointment, getAppointment };

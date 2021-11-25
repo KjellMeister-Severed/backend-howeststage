@@ -20,6 +20,25 @@ function errorHandler(err, req, res, next) {
     .json({error: err});
 }
 
+/*
+    Authentication middleware
+*/
+const authenticateJWT = async (req, res, next) => {
+    const authHeader = req.headers.authorization;
+
+    if (authHeader) {
+        const token = authHeader.split(' ')[1]; // Bearer token
+        const userInfo = await userController.getAzureUserInfo(token);
+        
+        if(userInfo.error != null) return res.status(401).end("Unauthorized");
+
+        req.userInfo = userInfo;
+        next();
+    } else {
+        res.sendStatus(401);
+    }
+};
+
 const userController = require("./controllers/user_controller");
 const companyController = require("./controllers/company_controller");
 
@@ -128,10 +147,10 @@ router.delete("/companies/:companyId", async (req, res, next) => {
 
 // Company magic link generation
 router.post("/companies/:companyId/generatemagiclink", async (req, res, next) => {
-    try{
+    try {
         const companyId = req.params.companyId;
         res.status(200).json({ result: await companyController.generateMagicLink(companyId) });
-    }catch(err){
+    } catch(err){
         next(err);
     }   
 });
@@ -159,9 +178,16 @@ router.patch("/user", async (req, res, next) => {
 });
 
 // Get appointments for user
-router.get("/user/:userId/appointments", async (req, res, next) => {
+router.get("/user/:userId/appointments", authenticateJWT, async (req, res, next) => {
     try{
-        const appointments = await userController.getAppointmentsForUser(req.params.userId);
+        const userId = req.params.userId;
+        const userInfo = req.userInfo;
+        
+        if(userInfo.userPrincipalName != userId) {
+            throw "You do not have permission to view this user's appointments.";
+        }
+
+        const appointments = await userController.getAppointmentsForUser(userId);
         return res.status(200).json(appointments);
     }catch(err){
         next(err);
