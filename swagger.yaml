@@ -85,6 +85,23 @@ paths:
             type: array
             items:
               $ref: "#/definitions/User"
+  /user/{userId}/appointments:
+    get:
+      tags:
+        - Users
+      summary: "Get a user's appointments using his ID"
+      parameters:
+        - in: path
+          name: userId
+          required: true
+          type: string
+      responses:
+        "200":
+          description: "Succesful, returns the users appointments"
+          schema:
+            type: array
+            items:
+              type: object
   /companies:
     get:
       tags:
@@ -97,6 +114,22 @@ paths:
             type: array
             items:
               $ref: "#/definitions/DetailedCompany"
+    post:
+      tags:
+        - Companies
+      summary: "Add a company"
+      parameters:
+        - in: body
+          name: company
+          required: true
+          schema:
+            $ref: "#/definitions/Company"
+      responses:
+        "201":
+          description: "Returns created company"
+          schema:
+            $ref: "#/definitions/DetailedCompany"
+      
   /companies/me:
     get:
       tags:
@@ -150,7 +183,7 @@ paths:
           name: company
           required: true
           schema:
-            $ref: "#/definitions/EditCompany"
+            $ref: "#/definitions/Company"
       responses:
         "200":
           description: "Succesful, returns the edited company"
@@ -170,6 +203,23 @@ paths:
           description: "Succesful, returns the deleted company"
           schema:
             $ref: "#/definitions/Company"
+  /companies/{companyId}/appointments:
+    get:
+      tags:
+        - Companies
+      summary: "Get the appointments for a company"
+      parameters:
+        - in: path
+          name: companyId
+          required: true
+          type: integer
+      responses:
+        "200":
+          description: "Succesful, returns the company appointments"
+          schema:
+            type: array
+            items:
+              type: object
   /companies/{companyId}/generatemagiclink:
     post:
       tags:
@@ -220,34 +270,34 @@ definitions:
       description:
         type: string
         example: "I'm lovin it"
+      address:
+        type: string
+        example: "Rijselstraat 5"
+      email:
+        type: string
+        format: email
+        example: "benjamin.robbe@student.howest.be"
+      phone_number:
+        type: string
+        example: "1234567890"
+      postalcode:
+        type: string
+        example: "8000"
+      city:
+        type: string
+        example: "Brugge"
+      website:
+        type: string
+        format: url
+        example: "https://www.mcdonalds.be/nl"
+      lookingfor:
+        type: string
+        example: "Gedreven IT-ers voor onze kiosk toepassing."
   DetailedCompany:
     allOf:
       - $ref: "#/definitions/Company"
       - type: object
         properties:
-          address:
-            type: string
-            example: "Rijselstraat 5"
-          email:
-            type: string
-            format: email
-            example: "benjamin.robbe@student.howest.be"
-          phone_number:
-            type: string
-            example: "1234567890"
-          postalcode:
-            type: string
-            example: "8000"
-          city:
-            type: string
-            example: "Brugge"
-          website:
-            type: string
-            format: url
-            example: "https://www.mcdonalds.be/nl"
-          lookingfor:
-            type: string
-            example: "Gedreven IT-ers voor onze kiosk toepassing."
           bookingsUrl:
             type: string
             format: url
