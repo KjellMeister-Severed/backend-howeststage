@@ -1,5 +1,4 @@
 const database = require("../services/database");
-const azureRepository = require("./azure_repository");
 
 async function createUser(id) {
     return new Promise((resolve, reject) => {
