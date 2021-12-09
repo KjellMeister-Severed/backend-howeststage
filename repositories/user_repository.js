@@ -17,12 +17,12 @@ async function createUser(id) {
 async function getUserById(id) {
     return new Promise((resolve) => {
         database.executeQuery((connection) => {
-            connection.query(`SELECT id, cv_path, linkedin_url, is_admin FROM users WHERE id = ?`,
+            connection.query(`SELECT id, cv_path, linkedin_url FROM users WHERE id = ?`,
             [id],
             async function (err, result) {
                 if (err) return reject(err);
 
-                if(result.length == 0) resolve(null);
+                if(result.length == 0) return resolve(null);
 
                 resolve(rowToUser(result[0]));
             });
@@ -66,7 +66,6 @@ function rowToUser(row) {
         id: row.id,
         cv_path: row.cv_path,
         linkedin_url: row.linkedin_url,
-        is_admin: row.is_admin
     }
 }
 

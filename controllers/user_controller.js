@@ -1,5 +1,6 @@
 const path = require("path");
 const userRepository = require("../repositories/user_repository");
+const roleRepository = require("../repositories/role_repository");
 const azureRepository = require("../repositories/azure_repository");
 
 async function getAzureUserInfo(token) {
@@ -11,7 +12,10 @@ async function getAppointmentsForUser(userPrincipalName) {
 }
 
 async function getUserById(id) {
-    return await userRepository.getUserById(id);
+    const user = await userRepository.getUserById(id);
+    user.roles = await getRoles(id);
+
+    return user;
 }
 
 async function editUserById(id, editUser) {
@@ -56,4 +60,21 @@ async function cancelAppointmentForUser(userId, appointmentId) {
     return true;
 }
 
-module.exports = { getAzureUserInfo, getUserById, editUserById, uploadCV, getAppointmentsForUser, cancelAppointmentForUser };
+async function getRoles(userId) {
+    const roles = await roleRepository.getUserRoles(userId);
+
+    if(roles == null) return false;
+
+    return roles.map(role => role.name);
+}
+
+async function hasRole(userId, role) {
+    const roles = await roleRepository.getUserRoles(userId);
+
+    if(roles == null) return false;
+
+    const roleNames = roles.map(role => role.name);
+    return roleNames.includes(role);
+}
+
+module.exports = { getAzureUserInfo, getUserById, editUserById, uploadCV, getAppointmentsForUser, cancelAppointmentForUser, hasRole };
