@@ -23,7 +23,7 @@ function errorHandler(err, req, res, next) {
 /*
     Authentication middleware
 */
-const authenticateJWT = async (req, res, next) => {
+const authenticateUserJWT = async (req, res, next) => {
     const authHeader = req.headers.authorization;
 
     if (authHeader) {
@@ -39,6 +39,26 @@ const authenticateJWT = async (req, res, next) => {
     }
 };
 
+const authenticateCompanyJWT = async (req, res, next) => {
+    const authHeader = req.headers.authorization;
+
+    if (authHeader) {
+        try { 
+            const token = authHeader.split(' ')[1]; // Bearer token
+        
+            const companyInfo = jwt.verify(token, process.env.JWT_KEY);
+
+            req.companyInfo = await companyController.getCompanyById(companyInfo.companyId);
+            
+            next();
+        } catch(err) {
+            res.sendStatus(401);
+        }
+    } else {
+        res.sendStatus(401);
+    }
+};
+
 const userController = require("./controllers/user_controller");
 const companyController = require("./controllers/company_controller");
 
@@ -49,12 +69,9 @@ const router = express.Router()
 app.use('/api', router)
 
 // Get my company
-router.get("/companies/me", async (req, res, next) => {
+router.get("/companies/me", authenticateCompanyJWT, async (req, res, next) => {
     try {
-        const authHeader = req.headers['authorization'];
-        const token = authHeader.split(' ')[1];
-        const decoded = jwt.verify(token, process.env.JWT_KEY);
-        res.status(200).json(await companyController.getCompanyById(decoded.companyId));
+        res.status(200).json(req.companyInfo);
     } catch (err) {
         next(err);
     }
@@ -72,8 +89,13 @@ router.get("/companies", async (req, res, next) => {
 });
 
 // Create company
-router.post("/companies", async (req, res, next) => {
+router.post("/companies", authenticateUserJWT, async (req, res, next) => {
     try {
+        const userId = req.userInfo.userPrincipalName;
+        if(!await userController.hasRole(userId, "Administrator")) {
+            return res.status(401).end("Unauthorized");
+        }
+
         const newCompany = await companyController.addCompany(req.body);
         return res.status(200).json(newCompany);
     } catch (err) {
@@ -82,8 +104,13 @@ router.post("/companies", async (req, res, next) => {
 });
 
 // Import company CSV
-router.post("/companies/csv", async (req, res, next) => {
+router.post("/companies/csv", authenticateUserJWT, async (req, res, next) => {
     try {
+        const userId = req.userInfo.userPrincipalName;
+        if(!await userController.hasRole(userId, "Administrator")) {
+            return res.status(401).end("Unauthorized");
+        }
+
         companyController.uploadCSV(req.files.companiesCsv);
         const success = await companyController.addCompaniesFromCSV("./companies.csv");
 
@@ -92,6 +119,17 @@ router.post("/companies/csv", async (req, res, next) => {
         next(err);
     }
 
+});
+
+// Get appointments for my company
+router.get("/companies/appointments", authenticateCompanyJWT, async (req, res, next) => {
+    try {
+        const companyInfo = req.companyInfo;
+
+        return res.status(200).json(await companyController.listAppointmentsForCompany(companyInfo.id));
+    } catch (err) {
+        next(err);
+    }
 });
 
 // Get company by ID
@@ -108,8 +146,14 @@ router.get("/companies/:companyId", async (req, res, next) => {
 });
 
 // Get appointments for a company
-router.get("/companies/:companyId/appointments", async (req, res, next) => {
+router.get("/companies/:companyId/appointments", authenticateUserJWT, async (req, res, next) => {
     try {
+        const userId = req.userInfo.userPrincipalName;
+
+        if(!await userController.hasRole(userId, "Administrator")) {
+            return res.status(401).end("Unauthorized");
+        }
+
         const companyId = req.params.companyId;
         return res.status(200).json(await companyController.listAppointmentsForCompany(companyId));
     } catch (err) {
@@ -118,8 +162,14 @@ router.get("/companies/:companyId/appointments", async (req, res, next) => {
 });
 
 // Edit company
-router.patch("/companies/:companyId", async (req, res, next) => {
+router.patch("/companies/:companyId", authenticateUserJWT, async (req, res, next) => {
     try {
+        const userId = req.userInfo.userPrincipalName;
+
+        if(!await userController.hasRole(userId, "Administrator")) {
+            return res.status(401).end("Unauthorized");
+        }
+
         const companyId = req.params.companyId;
 
         const editedCompany = await companyController.editCompany(companyId, req.body);
@@ -131,8 +181,14 @@ router.patch("/companies/:companyId", async (req, res, next) => {
 });
 
 // Delete company
-router.delete("/companies/:companyId", async (req, res, next) => {
+router.delete("/companies/:companyId", authenticateUserJWT, async (req, res, next) => {
     try {
+        const userId = req.userInfo.userPrincipalName;
+
+        if(!await userController.hasRole(userId, "Administrator")) {
+            return res.status(401).end("Unauthorized");
+        }
+
         const companyId = req.params.companyId;
 
         const deletedCompany = await companyController.deleteCompany(companyId);
@@ -166,7 +222,7 @@ app.get("/signin/:token", async (req, res, next) => {
 });
 
 // Get user info
-router.get("/user", authenticateJWT, async (req, res, next) => {
+router.get("/user", authenticateUserJWT, async (req, res, next) => {
     try{
         const user = await userController.getUserById(req.userInfo.userPrincipalName);
         console.log(await userController.hasRole(req.userInfo.userPrincipalName, "Administrator"));
@@ -177,7 +233,7 @@ router.get("/user", authenticateJWT, async (req, res, next) => {
 });
 
 // Edit user
-router.patch("/user", authenticateJWT, async (req, res, next) => {
+router.patch("/user", authenticateUserJWT, async (req, res, next) => {
     try{
         const editedUser = await userController.editUserById(req.userInfo.userPrincipalName, req.body);
         return res.status(200).json(editedUser);    
@@ -186,11 +242,32 @@ router.patch("/user", authenticateJWT, async (req, res, next) => {
     }
 });
 
-// Get appointments for user
-router.get("/user/:userId/appointments", authenticateJWT, async (req, res, next) => {
+// Get appointments for the logged in user
+router.get("/user/appointments", authenticateUserJWT, async (req, res, next) => {
+    try{
+        const userInfo = req.userInfo;
+        const userId = userInfo.userPrincipalName;
+
+        if(!await userController.hasRole(userId, "Student")) {
+            return res.status(401).end("Unauthorized");
+        }
+
+        const appointments = await userController.getAppointmentsForUser(userInfo.userPrincipalName);
+        return res.status(200).json(appointments);
+    }catch(err){
+        next(err);
+    }
+});
+
+// Get appointments for a user
+router.get("/user/:userId/appointments", authenticateUserJWT, async (req, res, next) => {
     try{
         const userId = req.params.userId;
         const userInfo = req.userInfo;
+
+        if(!await userController.hasRole(userId, "Administrator")) {
+            return res.status(401).end("Unauthorized");
+        }
         
         if(userInfo.userPrincipalName != userId) {
             throw "You do not have permission to view this user's appointments.";
@@ -201,13 +278,14 @@ router.get("/user/:userId/appointments", authenticateJWT, async (req, res, next)
     }catch(err){
         next(err);
     }
-    
 });
 
 // Cancel a user appointment
-router.post("/user/:userId/appointments/:appointmentId/cancel", async (req, res, next) => {
-    try{
-        const result = await userController.cancelAppointmentForUser(req.params.userId, req.params.appointmentId);
+router.post("/user/appointments/:appointmentId/cancel", authenticateUserJWT, async (req, res, next) => {
+    try {
+        const userId = req.userInfo.userPrincipalName;
+
+        const result = await userController.cancelAppointmentForUser(userId, req.params.appointmentId);
         return res.status(200).json({ result: result });
     }catch(err){
         next(err);
@@ -215,7 +293,7 @@ router.post("/user/:userId/appointments/:appointmentId/cancel", async (req, res,
 });
 
 // Download CV
-router.get("/user/cv", authenticateJWT, (req, res, next) => {
+router.get("/user/cv", authenticateUserJWT, (req, res, next) => {
     try{
         res.download(`./private/cv/${req.userInfo.userPrincipalName}.pdf`);
     }catch(err){
@@ -225,7 +303,7 @@ router.get("/user/cv", authenticateJWT, (req, res, next) => {
 });
 
 // Upload CV
-router.post("/user/cv", authenticateJWT ,async (req, res, next) => {
+router.post("/user/cv", authenticateUserJWT ,async (req, res, next) => {
     try{
         const result = userController.uploadCV(req.userInfo.userPrincipalName, req.files.cv);
         return res.status(200).json(result);
