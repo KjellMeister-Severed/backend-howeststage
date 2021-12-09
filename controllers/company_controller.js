@@ -20,7 +20,7 @@ async function getCompanies() {
 }
 
 async function getCompanyById(companyId) {
-    let company = await companyRepository.getCompanyById(companyId);
+    const company = await companyRepository.getCompanyById(companyId);
     company.bookingsUrl = process.env.BOOKINGS_URL;
     return company;
 }

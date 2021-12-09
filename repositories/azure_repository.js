@@ -1,4 +1,5 @@
 const azureService = require("../services/azure_service");
+const companyRepository = require("./company_repository");
 const STAGEMARKT_BOOKING_BUSINESS = "HowestStagemarkt@howeststageplatform.onmicrosoft.com"; 
 
 async function getUserInfo(token) {
@@ -24,7 +25,9 @@ async function listAppointmentsForCompany(bookingsId) {
     `bookingBusinesses/${STAGEMARKT_BOOKING_BUSINESS}/appointments`);
     appointments = appointments.value;
 
-    return appointments.filter(appointment => appointment.staffMemberIds.includes(bookingsId));
+    return appointments
+    .filter(appointment => appointment.staffMemberIds.includes(bookingsId))
+    .map(mapAppointmentObject);
 }
 
 async function listAppointmentsForUser(userPrincipalName) {
@@ -32,7 +35,9 @@ async function listAppointmentsForUser(userPrincipalName) {
     `bookingBusinesses/${STAGEMARKT_BOOKING_BUSINESS}/appointments`);
     appointments = appointments.value;
 
-    return appointments.filter(appointment => appointment.customerEmailAddress == userPrincipalName);
+    return await Promise.all(appointments
+    .filter(appointment => appointment.customerEmailAddress == userPrincipalName)
+    .map(mapAppointmentObject));
 }
 
 async function getAppointment(appointmentId) {
@@ -45,6 +50,24 @@ async function cancelAppointment(appointmentId) {
     `bookingBusinesses/${STAGEMARKT_BOOKING_BUSINESS}/appointments/${appointmentId}/cancel`, {
         cancellationMessage: "Your appointment has been succesfully canceled."
     });
+}
+
+async function mapAppointmentObject(appointment) {
+    const company = await companyRepository.getCompanyByBookingsId(appointment.staffMemberIds[0]);
+    
+    return {
+        id: appointment.selfServiceAppointmentId,
+        startTime: appointment.start.dateTime,
+        endTime: appointment.end.dateTime,
+        company: {
+            id: company.id,
+            name: company.name
+        },
+        customer: {
+            id: appointment.customerEmailAddress,
+            name: appointment.customerName
+        }
+    };
 }
 
 module.exports = { getUserInfo, addEmployee, deleteEmployee, listAppointmentsForCompany, listAppointmentsForUser, cancelAppointment, getAppointment };
