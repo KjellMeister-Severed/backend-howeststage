@@ -32,6 +32,25 @@ async function getCompanyById(id) {
     });
 }
 
+async function getCompanyByBookingsId(bookingsId) {
+    return new Promise((resolve, reject) => {
+        database.executeQuery((connection) => {
+            connection.query(`SELECT id, name, email, phone_number, address, postal_code, city, website, description, looking_for, bookings_id
+            FROM companies WHERE bookings_id = ?`,
+            bookingsId,
+            function (err, result) {
+                if (err) return reject(err);
+
+                if(result.length == 0) {
+                    return resolve(null);
+                }
+
+                resolve(rowToCompany(result[0]));
+            });
+        });
+    });
+}
+
 async function getCompanyByName(name) {
     return new Promise((resolve, reject) => {
         database.executeQuery((connection) => {
@@ -42,7 +61,7 @@ async function getCompanyByName(name) {
                 if (err) return reject(err);
 
                 if(result.length == 0) {
-                    return reject(`Company with id ${id} not found.`);
+                    return resolve(null);
                 }
 
                 resolve(rowToCompany(result[0]));
@@ -51,7 +70,7 @@ async function getCompanyByName(name) {
     });
 }
 
-async function getCompanyByEmail(name) {
+async function getCompanyByEmail(email) {
     return new Promise((resolve, reject) => {
         database.executeQuery((connection) => {
             connection.query(`SELECT id, name, email, phone_number, address, postal_code, city, website, description, looking_for, bookings_id
@@ -61,7 +80,7 @@ async function getCompanyByEmail(name) {
                 if (err) return reject(err);
 
                 if(result.length == 0) {
-                    return reject(`Company with id ${id} not found.`);
+                    return resolve(null);
                 }
 
                 resolve(rowToCompany(result[0]));
@@ -232,5 +251,5 @@ function rowToMagicLink(row) {
     };
 }
 
-module.exports = { getAllCompanies, getCompanyById, getCompanyByName, getCompanyByEmail, deleteCompanyById, addCompany, editCompanyById, deleteOldMagicLinksForCompany
+module.exports = { getAllCompanies, getCompanyById, getCompanyByBookingsId, getCompanyByName, getCompanyByEmail, deleteCompanyById, addCompany, editCompanyById, deleteOldMagicLinksForCompany
     , setBookingsId, addMagicLinkToken, getMagicLink }
