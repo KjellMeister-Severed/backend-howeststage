@@ -78,7 +78,9 @@ async function generateMagicLink(companyId) {
 async function signInWithToken(token) {
   const magicLink = await companyRepository.getMagicLink(token);
   await companyRepository.deleteOldMagicLinksForCompany(magicLink.companyId);
-  return jwt.sign({companyId: magicLink.companyId}, process.env.JWT_KEY);
+  return jwt.sign({companyId: magicLink.companyId}, process.env.JWT_KEY, {
+    expiresIn: "1d"
+  });
 }
 
 
