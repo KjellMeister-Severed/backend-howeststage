@@ -160,7 +160,11 @@ insert  into `users_roles`(`user_id`,`role_id`) values
 ('adelinagiurea@howeststageplatform.onmicrosoft.com',1),
 ('adelinagiurea@howeststageplatform.onmicrosoft.com',2),
 ('adriaandesaeger@howeststageplatform.onmicrosoft.com',1),
-('adriaandesaeger@howeststageplatform.onmicrosoft.com',2);
+('adriaandesaeger@howeststageplatform.onmicrosoft.com',2),
+('borobbrecht@howeststageplatform.onmicrosoft.com',1),
+('borobbrecht@howeststageplatform.onmicrosoft.com',2),
+('kjellmaekelberg@howeststageplatform.onmicrosoft.com',1),
+('kjellmaekelberg@howeststageplatform.onmicrosoft.com',2);
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
