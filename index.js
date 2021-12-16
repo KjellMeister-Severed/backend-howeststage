@@ -212,10 +212,10 @@ router.delete("/companies/:companyId", authenticateUserJWT, async (req, res, nex
 })
 
 // Company magic link generation
-router.post("/companies/:companyId/generatemagiclink", async (req, res, next) => {
+router.post("/companies/:companyEmail/generatemagiclink", async (req, res, next) => {
     try {
-        const companyId = req.params.companyId;
-        res.status(200).json({ result: await companyController.generateMagicLink(companyId) });
+        const companyEmail = req.params.companyEmail;
+        res.status(200).json({ result: await companyController.generateMagicLink(companyEmail)});
     } catch(err){
         next(err);
     }   
