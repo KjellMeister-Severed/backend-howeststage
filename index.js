@@ -225,7 +225,6 @@ app.get("/signin/:token", async (req, res, next) => {
 router.get("/user", authenticateUserJWT, async (req, res, next) => {
     try{
         const user = await userController.getUserById(req.userInfo.userPrincipalName);
-        console.log(await userController.hasRole(req.userInfo.userPrincipalName, "Administrator"));
         return res.status(200).json(user);
     }catch(err){
         next(err);
