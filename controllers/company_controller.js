@@ -55,8 +55,8 @@ async function deleteCompany(companyId) {
   return deleteCompany;
 }
 
-async function generateMagicLink(companyId) {
-  const company = await companyRepository.getCompanyById(companyId);
+async function generateMagicLink(companyEmail) {
+  const company = await companyRepository.getCompanyByEmail(companyEmail);
   const generatedToken = generateToken();
 
   await companyRepository.deleteOldMagicLinksForCompany(company.id);
@@ -66,7 +66,7 @@ async function generateMagicLink(companyId) {
   `
   Hi there
   
-  Here is the link to login to your accounts on our platform: http://127.0.0.1/signin/${generatedToken}
+  Here is the link to login to your accounts on our platform: http://${process.env.EXPRESS_ENDPOINT}:${process.env.EXPRESS_PORT}/signin/${generatedToken}
   
   Kind regards
   Howest University of Applied Sciences
