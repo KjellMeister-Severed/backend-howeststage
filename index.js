@@ -177,7 +177,18 @@ router.patch("/companies/:companyId", authenticateUserJWT, async (req, res, next
     } catch (err) {
         next(err);
     }
+});
 
+// Edit my company
+router.patch("/companies", authenticateCompanyJWT, async (req, res, next) => {
+    try {
+        const companyId = req.companyInfo.id;
+
+        const editedCompany = await companyController.editCompany(companyId, req.body);
+        return res.status(200).json(editedCompany);
+    } catch (err) {
+        next(err);
+    }
 });
 
 // Delete company
