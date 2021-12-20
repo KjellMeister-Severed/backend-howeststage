@@ -1,4 +1,5 @@
 const database = require("../services/database");
+const fs = require('fs')
 
 async function createUser(id) {
     return new Promise((resolve, reject) => {
@@ -55,7 +56,7 @@ async function editUserById(id, editUser) {
     });
 }
 
-function fillEmptyEditProperties(editUser, currentUser) {
+function fillEmptyEditProperties(editUser) {
     return {
         linkedin_url : editUser.linkedin_url ? editUser.linkedin_url : editUser.linkedin_url
     };
@@ -64,7 +65,7 @@ function fillEmptyEditProperties(editUser, currentUser) {
 function rowToUser(row) {
     return {
         id: row.id,
-        cv_path: row.cv_path,
+        cv_path: fs.existsSync(`./private/cv/${row.id}.pdf`) ? `/private/cv/${row.id}.pdf` : null,
         linkedin_url: row.linkedin_url,
     }
 }

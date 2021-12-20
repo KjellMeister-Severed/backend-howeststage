@@ -51,7 +51,7 @@ function getProfilefile(userId) {
 async function cancelAppointmentForUser(userId, appointmentId) {
     const appointment = await azureRepository.getAppointment(appointmentId);
 
-    if(userId != appointment.customerEmailAddress) {
+    if(userId != appointment.customers[0].emailAddress) {
         throw "HELABA DA KAN HIER NI HE IEMAND ANDERS ZIJN APPOINTMENT CANCELLEN";
     }
     

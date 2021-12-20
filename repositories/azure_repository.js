@@ -58,6 +58,7 @@ async function mapAppointmentObject(appointment) {
     
     return {
         id: appointment.selfServiceAppointmentId,
+        bookingsId: appointment.id,
         startTime: appointment.start.dateTime,
         endTime: appointment.end.dateTime,
         company: {
