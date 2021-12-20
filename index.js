@@ -312,6 +312,18 @@ router.get("/user/cv", authenticateUserJWT, (req, res, next) => {
     
 });
 
+// Download user CV for a company
+router.get("/user/:userId/cv", authenticateCompanyJWT, async (req, res, next) => {
+    const userId = req.params.userId;
+
+    try{
+        res.download(`./private/cv/${userId}.pdf`);
+    }catch(err){
+        next(err);
+    }
+    
+});
+
 // Upload CV
 router.post("/user/cv", authenticateUserJWT ,async (req, res, next) => {
     try{
