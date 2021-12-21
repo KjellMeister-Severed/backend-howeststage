@@ -268,10 +268,6 @@ router.get("/user/appointments", authenticateUserJWT, async (req, res, next) => 
         const userInfo = req.userInfo;
         const userId = userInfo.userPrincipalName;
 
-        if(!await userController.hasRole(userId, "Student")) {
-            return res.status(401).end("Unauthorized");
-        }
-
         const appointments = await userController.getAppointmentsForUser(userInfo.userPrincipalName);
         return res.status(200).json(appointments);
     }catch(err){
