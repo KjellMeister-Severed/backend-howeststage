@@ -25,9 +25,10 @@ async function listAppointmentsForCompany(bookingsId) {
     `bookingBusinesses/${STAGEMARKT_BOOKING_BUSINESS}/appointments`);
     appointments = appointments.value;
 
-    return appointments
+    
+    return await Promise.all(appointments
     .filter(appointment => appointment.staffMemberIds.includes(bookingsId))
-    .map(mapAppointmentObject);
+    .map(mapAppointmentObject));
 }
 
 async function listAppointmentsForUser(userPrincipalName) {
@@ -57,6 +58,7 @@ async function mapAppointmentObject(appointment) {
     
     return {
         id: appointment.selfServiceAppointmentId,
+        bookingsId: appointment.id,
         startTime: appointment.start.dateTime,
         endTime: appointment.end.dateTime,
         company: {

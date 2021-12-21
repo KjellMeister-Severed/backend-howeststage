@@ -177,7 +177,18 @@ router.patch("/companies/:companyId", authenticateUserJWT, async (req, res, next
     } catch (err) {
         next(err);
     }
+});
 
+// Edit my company
+router.patch("/companies", authenticateCompanyJWT, async (req, res, next) => {
+    try {
+        const companyId = req.companyInfo.id;
+
+        const editedCompany = await companyController.editCompany(companyId, req.body);
+        return res.status(200).json(editedCompany);
+    } catch (err) {
+        next(err);
+    }
 });
 
 // Delete company
@@ -201,10 +212,10 @@ router.delete("/companies/:companyId", authenticateUserJWT, async (req, res, nex
 })
 
 // Company magic link generation
-router.post("/companies/:companyId/generatemagiclink", async (req, res, next) => {
+router.post("/companies/:companyEmail/generatemagiclink", async (req, res, next) => {
     try {
-        const companyId = req.params.companyId;
-        res.status(200).json({ result: await companyController.generateMagicLink(companyId) });
+        const companyEmail = req.params.companyEmail;
+        res.status(200).json({ result: await companyController.generateMagicLink(companyEmail)});
     } catch(err){
         next(err);
     }   
@@ -225,7 +236,16 @@ app.get("/signin/:token", async (req, res, next) => {
 router.get("/user", authenticateUserJWT, async (req, res, next) => {
     try{
         const user = await userController.getUserById(req.userInfo.userPrincipalName);
-        console.log(await userController.hasRole(req.userInfo.userPrincipalName, "Administrator"));
+        return res.status(200).json(user);
+    }catch(err){
+        next(err);
+    }
+});
+
+// Get user info as company
+router.get("/user/:userId", authenticateCompanyJWT, async (req, res, next) => {
+    try{
+        const user = await userController.getUserById(req.params.userId);
         return res.status(200).json(user);
     }catch(err){
         next(err);
@@ -247,10 +267,6 @@ router.get("/user/appointments", authenticateUserJWT, async (req, res, next) => 
     try{
         const userInfo = req.userInfo;
         const userId = userInfo.userPrincipalName;
-
-        if(!await userController.hasRole(userId, "Student")) {
-            return res.status(401).end("Unauthorized");
-        }
 
         const appointments = await userController.getAppointmentsForUser(userInfo.userPrincipalName);
         return res.status(200).json(appointments);
@@ -281,11 +297,32 @@ router.get("/user/:userId/appointments", authenticateUserJWT, async (req, res, n
 });
 
 // Cancel a user appointment
-router.post("/user/appointments/:appointmentId/cancel", authenticateUserJWT, async (req, res, next) => {
+router.delete("/user/appointments/:appointmentBookingsId", authenticateUserJWT, async (req, res, next) => {
     try {
         const userId = req.userInfo.userPrincipalName;
 
-        const result = await userController.cancelAppointmentForUser(userId, req.params.appointmentId);
+        const result = await userController.cancelAppointmentForUser(userId, req.params.appointmentBookingsId);
+        return res.status(200).json({ result: result });
+    }catch(err){
+        next(err);
+    }    
+});
+
+// Cancel a user's appointment as the company
+router.delete("/user/:userId/appointments/:appointmentBookingsId", authenticateCompanyJWT, async (req, res, next) => {
+    try {
+        const userId = req.params.userId;
+        const appointmentId = req.params.appointmentBookingsId;
+        const companyId = req.companyInfo.id;
+
+        const appointments = await companyController.listAppointmentsForCompany(companyId);
+        const appointment = appointments.find(appointment => appointment.bookingsId === appointmentId);
+        
+        if(appointment == null) {
+            return res.status(404).end();
+        }
+
+        const result = await userController.cancelAppointmentForUser(userId, appointmentId);
         return res.status(200).json({ result: result });
     }catch(err){
         next(err);
@@ -296,6 +333,18 @@ router.post("/user/appointments/:appointmentId/cancel", authenticateUserJWT, asy
 router.get("/user/cv", authenticateUserJWT, (req, res, next) => {
     try{
         res.download(`./private/cv/${req.userInfo.userPrincipalName}.pdf`);
+    }catch(err){
+        next(err);
+    }
+    
+});
+
+// Download user CV for a company
+router.get("/user/:userId/cv", authenticateCompanyJWT, async (req, res, next) => {
+    const userId = req.params.userId;
+
+    try{
+        res.download(`./private/cv/${userId}.pdf`);
     }catch(err){
         next(err);
     }
