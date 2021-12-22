@@ -226,7 +226,7 @@ app.get("/signin/:token", async (req, res, next) => {
     try{
         const token = req.params.token;
         const jwt = await companyController.signInWithToken(token);
-        res.status(302).redirect(`${process.env.MAGICLINK_REDIRECT_URL}?token=${jwt}`);    
+        res.status(302).redirect(`${process.env.MAGICLINK_REDIRECT_URL}?companyToken=${jwt}`);    
     }catch(err){
         next(err);
     }    
@@ -242,14 +242,49 @@ router.get("/user", authenticateUserJWT, async (req, res, next) => {
     }
 });
 
-// Get user info as company
-router.get("/user/:userId", authenticateCompanyJWT, async (req, res, next) => {
+// Get my user appointments
+router.get("/user/appointments", authenticateUserJWT, async (req, res, next) => {
     try{
-        const user = await userController.getUserById(req.params.userId);
-        return res.status(200).json(user);
+        const userInfo = req.userInfo;
+
+        const appointments = await userController.getAppointmentsForUser(userInfo.userPrincipalName);
+        return res.status(200).json(appointments);
     }catch(err){
         next(err);
     }
+});
+
+// Cancel a user appointment
+router.delete("/user/appointments/:appointmentBookingsId", authenticateUserJWT, async (req, res, next) => {
+    try {
+        const userId = req.userInfo.userPrincipalName;
+
+        const result = await userController.cancelAppointmentForUser(userId, req.params.appointmentBookingsId);
+        return res.status(200).json({ result: result });
+    }catch(err){
+        next(err);
+    }    
+});
+
+// Download CV
+router.get("/user/cv", authenticateUserJWT, (req, res, next) => {
+    try{
+        res.download(`./private/cv/${req.userInfo.userPrincipalName}.pdf`);
+    }catch(err){
+        next(err);
+    }
+    
+});
+
+// Upload CV
+router.post("/user/cv", authenticateUserJWT ,async (req, res, next) => {
+    try{
+        const result = userController.uploadCV(req.userInfo.userPrincipalName, req.files.cv);
+        return res.status(200).json(result);
+    } catch(err){
+        next(err);
+    }
+    
 });
 
 // Edit user
@@ -262,20 +297,17 @@ router.patch("/user", authenticateUserJWT, async (req, res, next) => {
     }
 });
 
-// Get appointments for the logged in user
-router.get("/user/appointments", authenticateUserJWT, async (req, res, next) => {
+// Get user info as company
+router.get("/user/:userId", authenticateCompanyJWT, async (req, res, next) => {
     try{
-        const userInfo = req.userInfo;
-        const userId = userInfo.userPrincipalName;
-
-        const appointments = await userController.getAppointmentsForUser(userInfo.userPrincipalName);
-        return res.status(200).json(appointments);
+        const user = await userController.getUserById(req.params.userId);
+        return res.status(200).json(user);
     }catch(err){
         next(err);
     }
 });
 
-// Get appointments for a user
+// Get a users appointments as an admin
 router.get("/user/:userId/appointments", authenticateUserJWT, async (req, res, next) => {
     try{
         const userId = req.params.userId;
@@ -294,18 +326,6 @@ router.get("/user/:userId/appointments", authenticateUserJWT, async (req, res, n
     }catch(err){
         next(err);
     }
-});
-
-// Cancel a user appointment
-router.delete("/user/appointments/:appointmentBookingsId", authenticateUserJWT, async (req, res, next) => {
-    try {
-        const userId = req.userInfo.userPrincipalName;
-
-        const result = await userController.cancelAppointmentForUser(userId, req.params.appointmentBookingsId);
-        return res.status(200).json({ result: result });
-    }catch(err){
-        next(err);
-    }    
 });
 
 // Cancel a user's appointment as the company
@@ -329,16 +349,6 @@ router.delete("/user/:userId/appointments/:appointmentBookingsId", authenticateC
     }    
 });
 
-// Download CV
-router.get("/user/cv", authenticateUserJWT, (req, res, next) => {
-    try{
-        res.download(`./private/cv/${req.userInfo.userPrincipalName}.pdf`);
-    }catch(err){
-        next(err);
-    }
-    
-});
-
 // Download user CV for a company
 router.get("/user/:userId/cv", authenticateCompanyJWT, async (req, res, next) => {
     const userId = req.params.userId;
@@ -348,18 +358,6 @@ router.get("/user/:userId/cv", authenticateCompanyJWT, async (req, res, next) =>
     }catch(err){
         next(err);
     }
-    
-});
-
-// Upload CV
-router.post("/user/cv", authenticateUserJWT ,async (req, res, next) => {
-    try{
-        const result = userController.uploadCV(req.userInfo.userPrincipalName, req.files.cv);
-        return res.status(200).json(result);
-    } catch(err){
-        next(err);
-    }
-    
 });
 
 app.use(errorHandler);
