@@ -40,7 +40,9 @@ async function editUserById(id, editUser) {
 
     const { linkedin_url } = fillEmptyEditProperties(editUser, currentUser);
 
-    if(linkedin_url != "" && !linkedin_url.startsWith("https://linkedin.com")) {
+    const urlRegex = /(https?:\/\/)?(www\.)?linkedin\.com\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/;
+
+    if(!urlRegex.test(linkedin_url)) {
         return Promise.reject(new Error("Please enter a valid LinkedIn URL."));
     }
 

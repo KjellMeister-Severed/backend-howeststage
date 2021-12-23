@@ -114,9 +114,26 @@ function addCompaniesFromCSV(csvFileUrl) {
 
           companies.forEach(company => {
             setTimeout(async () => {
+
+              const emailRegex = /^([a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6})*$/;
+              const phoneNumberRegex = /^\d{5,20}$/;
+              const urlRegex = /(https?:\/\/)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/;
+
+              if(!emailRegex.test(company.email)) {
+                return;
+              }
+
+              if(!phoneNumberRegex.test(company.phonenumber)) {
+                return;
+              }
+
+              if(!urlRegex.test(company.website)) {
+                return;
+              }
+
               await addCompany({
                 name: company.name,
-                email: `employee${progress}@howest.be`,
+                email: company.email,
                 phonenumber: company.phone_number,
                 address: company.address,
                 postalcode: company.postalcode,
