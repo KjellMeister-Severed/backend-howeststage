@@ -32,11 +32,11 @@ async function listAppointmentsForCompany(companyId) {
 
 async function addCompany(companyObject) {
   if(await companyRepository.getCompanyByName(companyObject.name)) {
-    throw "There is already a company with this name.";
+    return Promise.reject(new Error("There is already a company with this name."));
   }
 
   if(await companyRepository.getCompanyByEmail(companyObject.email)) {
-    throw "There is already a company with this email.";
+    return Promise.reject(new Error("There is already a company with this email."));
   }
   const newCompany = await companyRepository.addCompany(companyObject);
   const employee = await azureRepository.addEmployee(newCompany);
