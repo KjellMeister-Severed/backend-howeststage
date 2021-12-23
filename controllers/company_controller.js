@@ -32,11 +32,11 @@ async function listAppointmentsForCompany(companyId) {
 
 async function addCompany(companyObject) {
   if(await companyRepository.getCompanyByName(companyObject.name)) {
-    throw "There is already a company with this name.";
+    return Promise.reject(new Error("There is already a company with this name."));
   }
 
   if(await companyRepository.getCompanyByEmail(companyObject.email)) {
-    throw "There is already a company with this email.";
+    return Promise.reject(new Error("There is already a company with this email."));
   }
   const newCompany = await companyRepository.addCompany(companyObject);
   const employee = await azureRepository.addEmployee(newCompany);
@@ -52,7 +52,7 @@ async function deleteCompany(companyId) {
   const deletedCompany = await companyRepository.deleteCompanyById(companyId);
   await azureRepository.deleteEmployee(deletedCompany.bookingsid);
 
-  return deleteCompany;
+  return deletedCompany;
 }
 
 async function generateMagicLink(companyEmail) {
@@ -66,7 +66,7 @@ async function generateMagicLink(companyEmail) {
   `
   Hi there
   
-  Here is the link to login to your accounts on our platform: http://${process.env.EXPRESS_ENDPOINT}:${process.env.EXPRESS_PORT}/signin/${generatedToken}
+  Here is the link to login to your account on our platform: http://${process.env.EXPRESS_ENDPOINT}:${process.env.EXPRESS_PORT}/signin/${generatedToken}
   
   Kind regards
   Howest University of Applied Sciences
@@ -114,9 +114,26 @@ function addCompaniesFromCSV(csvFileUrl) {
 
           companies.forEach(company => {
             setTimeout(async () => {
+
+              const emailRegex = /^([a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6})*$/;
+              const phoneNumberRegex = /^\d{5,20}$/;
+              const urlRegex = /(https?:\/\/)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/;
+
+              if(!emailRegex.test(company.email)) {
+                return;
+              }
+
+              if(!phoneNumberRegex.test(company.phonenumber)) {
+                return;
+              }
+
+              if(!urlRegex.test(company.website)) {
+                return;
+              }
+
               await addCompany({
                 name: company.name,
-                email: `employee${progress}@howest.be`,
+                email: company.email,
                 phonenumber: company.phone_number,
                 address: company.address,
                 postalcode: company.postalcode,

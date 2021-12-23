@@ -40,6 +40,12 @@ async function editUserById(id, editUser) {
 
     const { linkedin_url } = fillEmptyEditProperties(editUser, currentUser);
 
+    const urlRegex = /(https?:\/\/)?(www\.)?linkedin\.com\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/;
+
+    if(!urlRegex.test(linkedin_url)) {
+        return Promise.reject(new Error("Please enter a valid LinkedIn URL."));
+    }
+
     return new Promise((resolve, reject) => {
         database.executeQuery((connection) => {
             connection.query(`UPDATE users

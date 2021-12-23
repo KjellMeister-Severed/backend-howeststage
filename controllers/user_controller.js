@@ -63,7 +63,7 @@ async function cancelAppointmentForUser(userId, appointmentId) {
 async function getRoles(userId) {
     const roles = await roleRepository.getUserRoles(userId);
 
-    if(roles == null) return false;
+    if(roles == null) return [];
 
     return roles.map(role => role.name);
 }

@@ -1,0 +1,807 @@
+{
+	"info": {
+		"_postman_id": "890cf15e-acc1-4344-871b-4eaecdbcaa14",
+		"name": "Howest Stageplatform",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Get all companies",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{accessToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{endpoint}}/companies",
+					"host": [
+						"{{endpoint}}"
+					],
+					"path": [
+						"companies"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get my company",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{companyAccessToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{endpoint}}/companies/me",
+					"host": [
+						"{{endpoint}}"
+					],
+					"path": [
+						"companies",
+						"me"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get my company appointments",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{companyAccessToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{endpoint}}/companies/appointments",
+					"host": [
+						"{{endpoint}}"
+					],
+					"path": [
+						"companies",
+						"appointments"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get user as company",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{companyAccessToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{endpoint}}/user/:userId",
+					"host": [
+						"{{endpoint}}"
+					],
+					"path": [
+						"user",
+						":userId"
+					],
+					"variable": [
+						{
+							"key": "userId",
+							"value": "adriaandesaeger@howeststageplatform.onmicrosoft.com"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create new company",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{accessToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"McDonalds\",\r\n    \"email\": \"adelina.giurea@student.howest.be\",\r\n    \"phonenumber\": \"1234567890\",\r\n    \"address\": \"Rijselstraat 5\",\r\n    \"postalcode\": \"8000\",\r\n    \"city\": \"Brugge\",\r\n    \"website\": \"www.deloitte.com\",\r\n    \"description\": \"Chicken nuggets very nice\",\r\n    \"lookingfor\": \"We are looking for the best consultants and software engineers.\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{endpoint}}/companies",
+					"host": [
+						"{{endpoint}}"
+					],
+					"path": [
+						"companies"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Edit company by id",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{companyAccessToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"McDonalds 37\" ,\r\n    \"address\": \"Rijselstraat 4\",\r\n    \"postalcode\": \"8000\",\r\n    \"city\": \"Brugge\",\r\n    \"website\": \"www.deloitte.com\",\r\n    \"description\": \"Deloitte is the biggest multinational professional serice network with offices in over 150 countries and territories around the world.\",\r\n    \"lookingfor\": \"We are looking for the best consultants and software engineers.\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{endpoint}}/companies/132",
+					"host": [
+						"{{endpoint}}"
+					],
+					"path": [
+						"companies",
+						"132"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Edit my company",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{companyAccessToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"McDonalds 25\" ,\r\n    \"address\": \"Rijselstraat 4\",\r\n    \"postalcode\": \"8000\",\r\n    \"city\": \"Brugge\",\r\n    \"website\": \"www.deloitte.com\",\r\n    \"description\": \"Deloitte is the biggest multinational professional serice network with offices in over 150 countries and territories around the world.\",\r\n    \"lookingfor\": \"We are looking for the best consultants and software engineers.\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{endpoint}}/companies",
+					"host": [
+						"{{endpoint}}"
+					],
+					"path": [
+						"companies"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get specific company",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{accessToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{endpoint}}/companies/16",
+					"host": [
+						"{{endpoint}}"
+					],
+					"path": [
+						"companies",
+						"16"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete specific company",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{endpoint}}/companies/10",
+					"host": [
+						"{{endpoint}}"
+					],
+					"path": [
+						"companies",
+						"10"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Upload CV",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{accessToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "cv",
+							"type": "file",
+							"src": "/C:/Users/Adriaan/Downloads/adriaan de saeger CV (4).pdf"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{endpoint}}/user/cv",
+					"host": [
+						"{{endpoint}}"
+					],
+					"path": [
+						"user",
+						"cv"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Edit user",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{accessToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"linkedin_url\": \"linkedin.fr\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{endpoint}}/user/",
+					"host": [
+						"{{endpoint}}"
+					],
+					"path": [
+						"user",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get user CV",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{accessToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{endpoint}}/user/cv",
+					"host": [
+						"{{endpoint}}"
+					],
+					"path": [
+						"user",
+						"cv"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get user CV as company",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{companyAccessToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{endpoint}}/user/:userId/cv",
+					"host": [
+						"{{endpoint}}"
+					],
+					"path": [
+						"user",
+						":userId",
+						"cv"
+					],
+					"variable": [
+						{
+							"key": "userId",
+							"value": "adriaandesaeger@howeststageplatform.onmicrosoft.com"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Import company CSV",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJub25jZSI6IkVlTElWaXAwUXk3Nk5jOXctdzhxZjNTc0NRcVpjcHNhdU1nODVGcEVCYk0iLCJhbGciOiJSUzI1NiIsIng1dCI6Ik1yNS1BVWliZkJpaTdOZDFqQmViYXhib1hXMCIsImtpZCI6Ik1yNS1BVWliZkJpaTdOZDFqQmViYXhib1hXMCJ9.eyJhdWQiOiIwMDAwMDAwMy0wMDAwLTAwMDAtYzAwMC0wMDAwMDAwMDAwMDAiLCJpc3MiOiJodHRwczovL3N0cy53aW5kb3dzLm5ldC8yMjNiYTM4NS1hNzhiLTRiYzItODI1Yi0xYzQ1YTdkOTdhZmEvIiwiaWF0IjoxNjQwMTg0NjQyLCJuYmYiOjE2NDAxODQ2NDIsImV4cCI6MTY0MDE5MDE5OCwiYWNjdCI6MCwiYWNyIjoiMSIsImFpbyI6IkFTUUEyLzhUQUFBQTY1U3VxcG9FWXVKVzVnUndWUmF5b0NyQlR0ZnNPM290aTUveWgzamp3ZDA9IiwiYW1yIjpbInB3ZCJdLCJhcHBfZGlzcGxheW5hbWUiOiJCYWNrLWVuZCIsImFwcGlkIjoiM2Q1MTM5YmYtZGM2Yy00MGQ5LTlmNmUtNjRjZTNiNzliMjZiIiwiYXBwaWRhY3IiOiIxIiwiZmFtaWx5X25hbWUiOiJEZSBTYWVnZXIiLCJnaXZlbl9uYW1lIjoiQWRyaWFhbiIsImlkdHlwIjoidXNlciIsImlwYWRkciI6IjE5My4xOTEuMTc5LjI0MCIsIm5hbWUiOiJBZHJpYWFuIERlIFNhZWdlciIsIm9pZCI6IjNiZDQ4NWJmLTcwYzAtNDZiNC1hOGEyLTNjOTg5MDY5YWUxMCIsInBsYXRmIjoiMyIsInB1aWQiOiIxMDAzMjAwMTk1RDc1RkVFIiwicmgiOiIwLkFTOEFoYU03SW91bndrdUNXeHhGcDlsNi1yODVVVDFzM05sQW4yNWt6anQ1c21zdkFESS4iLCJzY3AiOiJCb29raW5ncy5NYW5hZ2UuQWxsIENhbGVuZGFycy5SZWFkIFVzZXIuUmVhZCBwcm9maWxlIG9wZW5pZCBlbWFpbCIsInNpZ25pbl9zdGF0ZSI6WyJrbXNpIl0sInN1YiI6ImdaRFUwMlZPZTJLUTlSX0dwRVVveDNpWEh3bkdzZFpOeENhUVZLRDRveUEiLCJ0ZW5hbnRfcmVnaW9uX3Njb3BlIjoiRVUiLCJ0aWQiOiIyMjNiYTM4NS1hNzhiLTRiYzItODI1Yi0xYzQ1YTdkOTdhZmEiLCJ1bmlxdWVfbmFtZSI6ImFkcmlhYW5kZXNhZWdlckBob3dlc3RzdGFnZXBsYXRmb3JtLm9ubWljcm9zb2Z0LmNvbSIsInVwbiI6ImFkcmlhYW5kZXNhZWdlckBob3dlc3RzdGFnZXBsYXRmb3JtLm9ubWljcm9zb2Z0LmNvbSIsInV0aSI6ImdCNDVuT0Nnb0U2ZTh3cVBIY0U4QUEiLCJ2ZXIiOiIxLjAiLCJ3aWRzIjpbIjYyZTkwMzk0LTY5ZjUtNDIzNy05MTkwLTAxMjE3NzE0NWUxMCIsImI3OWZiZjRkLTNlZjktNDY4OS04MTQzLTc2YjE5NGU4NTUwOSJdLCJ4bXNfc3QiOnsic3ViIjoia25YODFzeFdldjZiYVNIVkUzaF84V3NuZGMzT3B0Sl9qbjlFeHNBUG0wQSJ9LCJ4bXNfdGNkdCI6MTYzNDA1NjQ2MH0.CCQ1AUjOQkg2UymNNLSXoT9L737VJWmieAOWFUaOjWx4cr4_XJrJb4MFklmvnorU2haktcDHYiG4iZEsg-_W8AQxbkJY3nS4RJlteyzLOhPg63OXgz7V5q51bywBg7dtOZSwTFH6BVXedFpe5-3aXRiAAInyJJkmqjnSbQoPOBnvu3x5ROArkw49PRjoeGEhDsefkvJCCTV_nAyWLreAcTwWz6CsW_x-vCRgaCyVa6YtEXQrJYajlyEX363ydsuFZHMPMOJTHVp0WztfeMo0YDd1fxP13dpMN6V5mz5nK_LQV9acWsDMQ7BRXMG66CMzWKeM9tS7QrSK9p7IXgSwQg",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "companiesCsv",
+							"type": "file",
+							"src": "/C:/Users/Adriaan/Desktop/School/Vakken/Jaar 3/S5/Project IV/back-end/companies.csv"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{endpoint}}/companies/csv",
+					"host": [
+						"{{endpoint}}"
+					],
+					"path": [
+						"companies",
+						"csv"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Cancel an appointment",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{accessToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{endpoint}}/user/appointments/AQMkADRmMTU3MDc5LWNkOGUtNDliMy04MGJhLWVkMjFjOGJmYWEAMTkARgAAA0ouEZWi6ilImykyTsrJg54HAGmf1hlb_ptGj0XtkaigLhcAAAIBDQAAAGmf1hlb_ptGj0XtkaigLhcAAAINMwAAAA==",
+					"host": [
+						"{{endpoint}}"
+					],
+					"path": [
+						"user",
+						"appointments",
+						"AQMkADRmMTU3MDc5LWNkOGUtNDliMy04MGJhLWVkMjFjOGJmYWEAMTkARgAAA0ouEZWi6ilImykyTsrJg54HAGmf1hlb_ptGj0XtkaigLhcAAAIBDQAAAGmf1hlb_ptGj0XtkaigLhcAAAINMwAAAA=="
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Cancel an appointment as company",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{companyAccessToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{endpoint}}/user/:userId/appointments/:appointmentId",
+					"host": [
+						"{{endpoint}}"
+					],
+					"path": [
+						"user",
+						":userId",
+						"appointments",
+						":appointmentId"
+					],
+					"variable": [
+						{
+							"key": "userId",
+							"value": "adriaandesaeger@howeststageplatform.onmicrosoft.com"
+						},
+						{
+							"key": "appointmentId",
+							"value": "8661e872-7011-4351-adc9-4fdaaaae9589"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get user appointments",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{accessToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{endpoint}}/user/adelinagiurea@howeststageplatform.onmicrosoft.com/appointments",
+					"host": [
+						"{{endpoint}}"
+					],
+					"path": [
+						"user",
+						"adelinagiurea@howeststageplatform.onmicrosoft.com",
+						"appointments"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get my appointments",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{accessToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{endpoint}}/user/appointments",
+					"host": [
+						"{{endpoint}}"
+					],
+					"path": [
+						"user",
+						"appointments"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Generate magic link",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{endpoint}}/companies/:companyId/generatemagiclink",
+					"host": [
+						"{{endpoint}}"
+					],
+					"path": [
+						"companies",
+						":companyId",
+						"generatemagiclink"
+					],
+					"variable": [
+						{
+							"key": "companyId",
+							"value": "132"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get my information",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJub25jZSI6IkNfWXJlUFduUmJoME9MVU5mZzNjejJKWlA2bnFDM1EwcXZDeHU0aFFfOFkiLCJhbGciOiJSUzI1NiIsIng1dCI6Ik1yNS1BVWliZkJpaTdOZDFqQmViYXhib1hXMCIsImtpZCI6Ik1yNS1BVWliZkJpaTdOZDFqQmViYXhib1hXMCJ9.eyJhdWQiOiIwMDAwMDAwMy0wMDAwLTAwMDAtYzAwMC0wMDAwMDAwMDAwMDAiLCJpc3MiOiJodHRwczovL3N0cy53aW5kb3dzLm5ldC8yMjNiYTM4NS1hNzhiLTRiYzItODI1Yi0xYzQ1YTdkOTdhZmEvIiwiaWF0IjoxNjQwMjU3MDIwLCJuYmYiOjE2NDAyNTcwMjAsImV4cCI6MTY0MDI2MTc1NSwiYWNjdCI6MCwiYWNyIjoiMSIsImFpbyI6IkFTUUEyLzhUQUFBQVU5SXJBVDl4MUp3dnpaa09iTlRkZGdsMzZGSno0bGFybGFGRnNoTHhaOTQ9IiwiYW1yIjpbInB3ZCJdLCJhcHBfZGlzcGxheW5hbWUiOiJIb3dlc3QgU3RhZ2UgQm9va2luZyBQbGF0Zm9ybSIsImFwcGlkIjoiMDk3ZWU3OTctNGFhMS00Nzk0LWEyOGUtMWZkYjNjMWQwZGJlIiwiYXBwaWRhY3IiOiIwIiwiZmFtaWx5X25hbWUiOiJHaXVyZWEiLCJnaXZlbl9uYW1lIjoiQWRlbGluYSIsImlkdHlwIjoidXNlciIsImlwYWRkciI6IjE5My4xOTEuMTc5LjI0MCIsIm5hbWUiOiJBZGVsaW5hIEdpdXJlYSIsIm9pZCI6IjA5ZjVkNzdkLTYxNDEtNDA0My1iNGIyLWZkYzhlYzdlYjc0MCIsInBsYXRmIjoiMyIsInB1aWQiOiIxMDAzMjAwMTk2QTRCREI2IiwicmgiOiIwLkFTOEFoYU03SW91bndrdUNXeHhGcDlsNi1wZm5mZ21oU3BSSG9vNGYyendkRGI0dkFHNC4iLCJzY3AiOiJvcGVuaWQgcHJvZmlsZSBVc2VyLlJlYWQgZW1haWwiLCJzdWIiOiJZelNwSFFfMjkyb0R2VWxhT3JQWTMzUHA5YUJyc1RxX3dYY3V1MS0yVGVjIiwidGVuYW50X3JlZ2lvbl9zY29wZSI6IkVVIiwidGlkIjoiMjIzYmEzODUtYTc4Yi00YmMyLTgyNWItMWM0NWE3ZDk3YWZhIiwidW5pcXVlX25hbWUiOiJhZGVsaW5hZ2l1cmVhQGhvd2VzdHN0YWdlcGxhdGZvcm0ub25taWNyb3NvZnQuY29tIiwidXBuIjoiYWRlbGluYWdpdXJlYUBob3dlc3RzdGFnZXBsYXRmb3JtLm9ubWljcm9zb2Z0LmNvbSIsInV0aSI6Inl6Z1otVzFGaTB1RXQ1VjVaS3d1QUEiLCJ2ZXIiOiIxLjAiLCJ3aWRzIjpbIjcyOTgyN2UzLTljMTQtNDlmNy1iYjFiLTk2MDhmMTU2YmJiOCIsImYyZWY5OTJjLTNhZmItNDZiOS1iN2NmLWExMjZlZTc0YzQ1MSIsIjY5MDkxMjQ2LTIwZTgtNGE1Ni1hYTRkLTA2NjA3NWIyYTdhOCIsImYyOGExZjUwLWY2ZTctNDU3MS04MThiLTZhMTJmMmFmNmI2YyIsImYwMjNmZDgxLWE2MzctNGI1Ni05NWZkLTc5MWFjMDIyNjAzMyIsIjI5MjMyY2RmLTkzMjMtNDJmZC1hZGUyLTFkMDk3YWYzZTRkZSIsImZlOTMwYmU3LTVlNjItNDdkYi05MWFmLTk4YzNhNDlhMzhiMSIsIjYyZTkwMzk0LTY5ZjUtNDIzNy05MTkwLTAxMjE3NzE0NWUxMCIsImI3OWZiZjRkLTNlZjktNDY4OS04MTQzLTc2YjE5NGU4NTUwOSJdLCJ4bXNfc3QiOnsic3ViIjoiMXlCc1dwS0taLTc4QkdCXzROOHVOVk9ZZHNwYVgzOXRBZVV3S3lXOWdKMCJ9LCJ4bXNfdGNkdCI6MTYzNDA1NjQ2MH0.uUxBISeyAwtm2XbplgKvWKxVeOjeqHr-xjf15zWRMoBuFqgf5p53QrGIxJiT7IdkgczLj1HHAGhWQHEi0YeWcVbgS0sSaQTJqS6Zbm2WCssm1y615qGkP7fIXQQhY2RaYqEzGAvKSbcvi1XG21lJdhEEQMBRmACSQNh2cMi1PzKmnDSjSOOk6XsqrvP9xZq74yBjGsxVHYhSzPTBRKmNtsUDqpLyCU6WN-jI_XuILT_DvFmjMcKMoYPYFyB3mn9fvxcBsQJFVYHZvAn97GkmhRJxJQp_IeQ5KcuKEKm2m-86XY7HHeeFaqXX7y6xXKArAPt8SH1Zdfi23j-jALr4xg",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{endpoint}}/user",
+					"host": [
+						"{{endpoint}}"
+					],
+					"path": [
+						"user"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get API code",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://login.microsoftonline.com/223ba385-a78b-4bc2-825b-1c45a7d97afa/oauth2/v2.0/authorize?client_id=3d5139bf-dc6c-40d9-9f6e-64ce3b79b26b&response_type=code&redirect_uri=http://localhost:1234&response_mode=query&scope=User.Read",
+					"protocol": "https",
+					"host": [
+						"login",
+						"microsoftonline",
+						"com"
+					],
+					"path": [
+						"223ba385-a78b-4bc2-825b-1c45a7d97afa",
+						"oauth2",
+						"v2.0",
+						"authorize"
+					],
+					"query": [
+						{
+							"key": "client_id",
+							"value": "3d5139bf-dc6c-40d9-9f6e-64ce3b79b26b"
+						},
+						{
+							"key": "response_type",
+							"value": "code"
+						},
+						{
+							"key": "redirect_uri",
+							"value": "http://localhost:1234"
+						},
+						{
+							"key": "response_mode",
+							"value": "query"
+						},
+						{
+							"key": "scope",
+							"value": "User.Read"
+						},
+						{
+							"key": "statec",
+							"value": "borat",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET ACCESS TOKEN PLEASE",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "grant_type",
+							"value": "authorization_code",
+							"type": "text"
+						},
+						{
+							"key": "code",
+							"value": "0.AS8AhaM7IounwkuCWxxFp9l6-r85UT1s3NlAn25kzjt5smsvADI.AQABAAIAAAD--DLA3VO7QrddgJg7WevrSKeGYJRTnturQtG8pUSbMWUjCcoCJOmG0H3vMeIMFRMHuuK2Ob5j0tj8t6s43cZzB1RkvCqyJ_1dowEi_-qt1gN1guyGFnFFm77v3-ed3MzwKeix6mamuaHVBJYvuVum7Dg9G4LJ3vufjQZIqMMyIiVUs80MPLsrgbJYZA_1Rd9X_jo5fYP-t1naVj3E-_oFiMigCZ0jI3trDBStbr4e0GbKjnBNJt2HiVkTOLm9tdppewnDpZfUm5S6BFJ86MUXPbfx0vMH6UAHDpCOsLp1JNoMyX3qnKwbHyHXfi9wmuqEHq60t9nLczZr72y4mhBsmM6JHPVBYtzO_2csIFExWVwxBRdt_sXJObwth5QhhQG9ZtHE5wULL7xLNSl3ZCz3TH5epCnHSGJtYBovdeoi3I6S_nKUejZBJJlRp5UNo0DbCIM14CZaNLVB4rpV0a8Z5nsXqwTvgL2TZ99t1fG8kPy3fyt_zF9ScSGTrriAkh5IHBJZjcONWxVkbgQqINKfC4cvveCfqPiZJZ1aPpzkK_X2dOPjFDrkcOy2KOn8GQvxuQiNDYnXqeapKuOwsoUOWmOBSwLjIgxKknaRl1_6dyAA",
+							"type": "text"
+						},
+						{
+							"key": "client_secret",
+							"value": "eqB7Q~usJfWyWHL1Y9MU8hDxRL72vboHoO3Ku",
+							"type": "text"
+						},
+						{
+							"key": "client_id",
+							"value": "3d5139bf-dc6c-40d9-9f6e-64ce3b79b26b",
+							"type": "text"
+						},
+						{
+							"key": "redirect_uri",
+							"value": "http://localhost:1234",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://login.microsoftonline.com/223ba385-a78b-4bc2-825b-1c45a7d97afa/oauth2/v2.0/token",
+					"protocol": "https",
+					"host": [
+						"login",
+						"microsoftonline",
+						"com"
+					],
+					"path": [
+						"223ba385-a78b-4bc2-825b-1c45a7d97afa",
+						"oauth2",
+						"v2.0",
+						"token"
+					],
+					"query": [
+						{
+							"key": "client_id",
+							"value": "097ee797-4aa1-4794-a28e-1fdb3c1d0dbe",
+							"disabled": true
+						},
+						{
+							"key": "scope",
+							"value": "User.Read",
+							"disabled": true
+						},
+						{
+							"key": "code",
+							"value": "0.AS8AhaM7IounwkuCWxxFp9l6-pfnfgmhSpRHoo4f2zwdDb4FALA.AQABAAIAAAD--DLA3VO7QrddgJg7WevrlupcoeX6h_LQFP5BRHUT3aRMA7b4g5Vsu8pZIE5xqFPbKxIe6ir0oZQxoLMhuNRVy8P3zISYFRSMSfUPAPxAmf9iwlcyM2LgQ7xo0Yq5LUzIa6mzkYf_eaTsZQxi2xbXnsQShGu-zWmeuGHHK6YhJXhAqtUjH4f91aKP9XYsUwDbWzhG0KN6pjfgG357cZo5y5Y89mWynu3cZMxoCW9gKVroGZg6J8XZEtSZeRUtU1gzbuKhn5TlUzi-_Qho2Y-qH2vlhvpyL3r70Akb83jWyQ3HsS5EGbFJHYIJlo9WdvdwZjvnmtK6Gz5nPkT_yuEBS9DLma7Z4ibnCPuzfbG5wgnt4XLX-4J_Jc0CHVEzr1Q1UUJJoQlumVG6Ff_cERl-QXjVumIZigqb5eCjhwZN2sVdlC__bAeiGMw_Jqlyt2RHzcWQMWen2jOb84O2VqWOccJHs1guZ_-9GTC8STtNJF1DbhfPd01nib6utK8Xli0qbEbYdEMrrhptys4IsBTFS4f35AMfjdcQBG_HSgWIDPEGsuL5iRhkso--ijmh7ZFgqqs8dJiR2rJVsdZW0MvFweX_xgMAUKwPSd_RJ8VgfyAA%26session_state=70e213d1-3b87-4fdf-9a13-89175ab4d706%23",
+							"disabled": true
+						},
+						{
+							"key": "redirect_uri",
+							"value": "http://localhost:3000/",
+							"disabled": true
+						},
+						{
+							"key": "grant_type",
+							"value": "authorization_code",
+							"disabled": true
+						},
+						{
+							"key": "client_secret",
+							"value": "0fb81c40-0926-4d7c-9bfb-7a527644f4d1",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "endpoint",
+			"value": "http://127.0.0.1:3001/api"
+		},
+		{
+			"key": "accessToken",
+			"value": "eyJ0eXAiOiJKV1QiLCJub25jZSI6ImljZ2NCckdManJMRmlEeFNHUko5eTM2WlhSMGdaXzl2cnBQVnVEQ2ZUdWsiLCJhbGciOiJSUzI1NiIsIng1dCI6Ik1yNS1BVWliZkJpaTdOZDFqQmViYXhib1hXMCIsImtpZCI6Ik1yNS1BVWliZkJpaTdOZDFqQmViYXhib1hXMCJ9.eyJhdWQiOiIwMDAwMDAwMy0wMDAwLTAwMDAtYzAwMC0wMDAwMDAwMDAwMDAiLCJpc3MiOiJodHRwczovL3N0cy53aW5kb3dzLm5ldC8yMjNiYTM4NS1hNzhiLTRiYzItODI1Yi0xYzQ1YTdkOTdhZmEvIiwiaWF0IjoxNjM5NjQ2NTkwLCJuYmYiOjE2Mzk2NDY1OTAsImV4cCI6MTYzOTY1MTUxNCwiYWNjdCI6MCwiYWNyIjoiMSIsImFpbyI6IkFTUUEyLzhUQUFBQTFjd2xpZi9xRC9RbnNLUmcxN2xHSEtYYWVpa2FVS2MvenBqL3dOUnp6VEE9IiwiYW1yIjpbInB3ZCJdLCJhcHBfZGlzcGxheW5hbWUiOiJCYWNrLWVuZCIsImFwcGlkIjoiM2Q1MTM5YmYtZGM2Yy00MGQ5LTlmNmUtNjRjZTNiNzliMjZiIiwiYXBwaWRhY3IiOiIxIiwiZmFtaWx5X25hbWUiOiJEZSBTYWVnZXIiLCJnaXZlbl9uYW1lIjoiQWRyaWFhbiIsImlkdHlwIjoidXNlciIsImlwYWRkciI6IjE5My4xOTEuMTc5LjI0NSIsIm5hbWUiOiJBZHJpYWFuIERlIFNhZWdlciIsIm9pZCI6IjNiZDQ4NWJmLTcwYzAtNDZiNC1hOGEyLTNjOTg5MDY5YWUxMCIsInBsYXRmIjoiMyIsInB1aWQiOiIxMDAzMjAwMTk1RDc1RkVFIiwicmgiOiIwLkFTOEFoYU03SW91bndrdUNXeHhGcDlsNi1yODVVVDFzM05sQW4yNWt6anQ1c21zdkFESS4iLCJzY3AiOiJCb29raW5ncy5NYW5hZ2UuQWxsIENhbGVuZGFycy5SZWFkIFVzZXIuUmVhZCBwcm9maWxlIG9wZW5pZCBlbWFpbCIsInN1YiI6ImdaRFUwMlZPZTJLUTlSX0dwRVVveDNpWEh3bkdzZFpOeENhUVZLRDRveUEiLCJ0ZW5hbnRfcmVnaW9uX3Njb3BlIjoiRVUiLCJ0aWQiOiIyMjNiYTM4NS1hNzhiLTRiYzItODI1Yi0xYzQ1YTdkOTdhZmEiLCJ1bmlxdWVfbmFtZSI6ImFkcmlhYW5kZXNhZWdlckBob3dlc3RzdGFnZXBsYXRmb3JtLm9ubWljcm9zb2Z0LmNvbSIsInVwbiI6ImFkcmlhYW5kZXNhZWdlckBob3dlc3RzdGFnZXBsYXRmb3JtLm9ubWljcm9zb2Z0LmNvbSIsInV0aSI6InZUZzFITjJBLTBXM0NCbkpFVjFDQUEiLCJ2ZXIiOiIxLjAiLCJ3aWRzIjpbIjYyZTkwMzk0LTY5ZjUtNDIzNy05MTkwLTAxMjE3NzE0NWUxMCIsImI3OWZiZjRkLTNlZjktNDY4OS04MTQzLTc2YjE5NGU4NTUwOSJdLCJ4bXNfc3QiOnsic3ViIjoia25YODFzeFdldjZiYVNIVkUzaF84V3NuZGMzT3B0Sl9qbjlFeHNBUG0wQSJ9LCJ4bXNfdGNkdCI6MTYzNDA1NjQ2MH0.CwfDKQAk1Eua3-4GuXcEyYnOm6ofnpEsm6bbZQjjGT0Q2VMCOffFcrsOFcywLzHnqjmTIj6FHM29y1tScXNAs1VLc78OM2IY1R7798bsvvMa3SbN_Gq_RSvuK3V7kHDK4FbwnJJrn7j9w_XHs_3z533swEop31hCO_K5gdZ16Pqd6jJ-HxvYEXCr8OGKEVn3VE6ZCPv7AW00gOOSJnhguqq30BatsN12buVbKm1CFPr24g88-de45jQlcWeOoOZXAnSZ3AP05vNtHxCsiv_4yGswwLheZwIslY1K5oRZ-3LorEQcMpK-L6QVYgak0N15-pj6LuuF6EBWkVPi1IxTMg"
+		},
+		{
+			"key": "companyAccessToken",
+			"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb21wYW55SWQiOjEzMiwiaWF0IjoxNjM5MDU2ODAwfQ.hTLpHS5uev1Im30uHeaLFm1p_JGUtDu9V1Fh46Xh4M8"
+		}
+	]
+}

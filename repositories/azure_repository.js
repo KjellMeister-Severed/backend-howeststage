@@ -49,7 +49,7 @@ async function getAppointment(appointmentId) {
 async function cancelAppointment(appointmentId) {
     return await azureService.fetchFromGraph("POST",
     `bookingBusinesses/${STAGEMARKT_BOOKING_BUSINESS}/appointments/${appointmentId}/cancel`, {
-        cancellationMessage: "Your appointment has been succesfully canceled."
+        cancellationMessage: "Your appointment has been succesfully cancelled."
     });
 }
 
