@@ -52,7 +52,7 @@ async function deleteCompany(companyId) {
   const deletedCompany = await companyRepository.deleteCompanyById(companyId);
   await azureRepository.deleteEmployee(deletedCompany.bookingsid);
 
-  return deleteCompany;
+  return deletedCompany;
 }
 
 async function generateMagicLink(companyEmail) {
