@@ -32,11 +32,11 @@ async function listAppointmentsForCompany(companyId) {
 
 async function addCompany(companyObject) {
   if(await companyRepository.getCompanyByName(companyObject.name)) {
-    throw "There is already a company with this name.";
+    return Promise.reject(new Error("There is already a company with this name."));
   }
 
   if(await companyRepository.getCompanyByEmail(companyObject.email)) {
-    throw "There is already a company with this email.";
+    return Promise.reject(new Error("There is already a company with this email."));
   }
   const newCompany = await companyRepository.addCompany(companyObject);
   const employee = await azureRepository.addEmployee(newCompany);
@@ -52,7 +52,7 @@ async function deleteCompany(companyId) {
   const deletedCompany = await companyRepository.deleteCompanyById(companyId);
   await azureRepository.deleteEmployee(deletedCompany.bookingsid);
 
-  return deleteCompany;
+  return deletedCompany;
 }
 
 async function generateMagicLink(companyEmail) {
@@ -66,7 +66,7 @@ async function generateMagicLink(companyEmail) {
   `
   Hi there
   
-  Here is the link to login to your accounts on our platform: http://${process.env.EXPRESS_ENDPOINT}:${process.env.EXPRESS_PORT}/signin/${generatedToken}
+  Here is the link to login to your account on our platform: http://${process.env.EXPRESS_ENDPOINT}:${process.env.EXPRESS_PORT}/signin/${generatedToken}
   
   Kind regards
   Howest University of Applied Sciences
