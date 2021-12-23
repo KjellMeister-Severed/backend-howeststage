@@ -40,6 +40,10 @@ async function editUserById(id, editUser) {
 
     const { linkedin_url } = fillEmptyEditProperties(editUser, currentUser);
 
+    if(linkedin_url != "" && !linkedin_url.startsWith("https://linkedin.com")) {
+        return Promise.reject(new Error("Please enter a valid LinkedIn URL."));
+    }
+
     return new Promise((resolve, reject) => {
         database.executeQuery((connection) => {
             connection.query(`UPDATE users
