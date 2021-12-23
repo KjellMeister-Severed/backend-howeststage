@@ -31,6 +31,22 @@ async function listAppointmentsForCompany(companyId) {
 }
 
 async function addCompany(companyObject) {
+  const emailRegex = /^([a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6})*$/;
+  const phoneNumberRegex = /^(?:(?:\(?(?:00|\+)([1-4]\d\d|[1-9]\d?)\)?)?[\-\.\ \\\/]?)?((?:\(?\d{1,}\)?[\-\.\ \\\/]?){0,})(?:[\-\.\ \\\/]?(?:#|ext\.?|extension|x)[\-\.\ \\\/]?(\d+))?$/;
+  const urlRegex = /(https?:\/\/)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/;
+
+  if(!emailRegex.test(companyObject.email)) {
+    return Promise.reject(new Error("Please enter a valid email address."));
+  }
+
+  if(!phoneNumberRegex.test(companyObject.phonenumber)) {
+    return Promise.reject(new Error("Please enter a valid phone number."));
+  }
+
+  if(!urlRegex.test(companyObject.website)) {
+    return Promise.reject(new Error("Please enter a valid website URL."));
+  }
+
   if(await companyRepository.getCompanyByName(companyObject.name)) {
     return Promise.reject(new Error("There is already a company with this name."));
   }
@@ -112,40 +128,29 @@ function addCompaniesFromCSV(csvFileUrl) {
           let counter = 0; // used for the delay between imports
           let progress = 0;
 
+          const failedCompanies = [];
+
           companies.forEach(company => {
             setTimeout(async () => {
-
-              const emailRegex = /^([a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6})*$/;
-              const phoneNumberRegex = /^\d{5,20}$/;
-              const urlRegex = /(https?:\/\/)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/;
-
-              if(!emailRegex.test(company.email)) {
-                return;
+              try {
+                await addCompany({
+                  name: company.name,
+                  email: "test@howeststageplatform.onmicrosoft.com",
+                  phonenumber: company.phone_number,
+                  address: company.address,
+                  postalcode: company.postalcode,
+                  city: company.city,
+                  website: company.website,
+                  description: company.description,
+                  lookingfor: company.looking_for,
+                });
+              } catch(err) {
+                failedCompanies.push({name: company.name, reason: err.message});
               }
-
-              if(!phoneNumberRegex.test(company.phonenumber)) {
-                return;
-              }
-
-              if(!urlRegex.test(company.website)) {
-                return;
-              }
-
-              await addCompany({
-                name: company.name,
-                email: company.email,
-                phonenumber: company.phone_number,
-                address: company.address,
-                postalcode: company.postalcode,
-                city: company.city,
-                website: company.website,
-                description: company.description,
-                lookingfor: company.looking_for,
-              });
 
               progress++;
               if(progress == companies.length) {
-                resolve(true);
+                resolve(failedCompanies);
               }
             }, 2000 * counter);
             counter++;

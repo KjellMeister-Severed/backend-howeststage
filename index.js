@@ -60,6 +60,7 @@ const authenticateCompanyJWT = async (req, res, next) => {
 
 const userController = require("./controllers/user_controller");
 const companyController = require("./controllers/company_controller");
+const { fail } = require('assert');
 
 /*
     API requests
@@ -111,9 +112,9 @@ router.post("/companies/csv", authenticateUserJWT, async (req, res, next) => {
         }
 
         companyController.uploadCSV(req.files.companiesCsv);
-        const success = await companyController.addCompaniesFromCSV("./companies.csv");
+        const failedCompanies = await companyController.addCompaniesFromCSV("./companies.csv");
 
-        res.status(200).json({ result: success });
+        res.status(200).json({ result: true, failedCompanies: failedCompanies});
     } catch (err) {
         next(err);
     }
