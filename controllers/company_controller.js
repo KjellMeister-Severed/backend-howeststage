@@ -66,7 +66,7 @@ async function generateMagicLink(companyEmail) {
   `
   Hi there
   
-  Here is the link to login to your accounts on our platform: http://${process.env.EXPRESS_ENDPOINT}:${process.env.EXPRESS_PORT}/signin/${generatedToken}
+  Here is the link to login to your account on our platform: http://${process.env.EXPRESS_ENDPOINT}:${process.env.EXPRESS_PORT}/signin/${generatedToken}
   
   Kind regards
   Howest University of Applied Sciences
